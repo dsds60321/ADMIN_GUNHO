@@ -147,5 +147,50 @@ const jqueryValidOptions = {
                 submitHandler: submitHandler // 외부에서 전달받은 함수 사용
             };
         }
+    },
+
+    // RULE
+    rule : {
+        add: function(submitHandler) {
+            return {
+                rules: {
+                    currency: {
+                        required: true
+                    },
+                    average_price: {
+                        required: true, // 필수 입력값
+                    },
+                    quantity: {
+                        required: true, // 필수 입력값
+                    },
+                    buy_target_price: {
+                        required: true, // 필수 입력값
+                    },
+                    sell_target_price: {
+                        required: true, // 필수 입력값
+                    }
+                },
+                errorElement: "span", // 오류 메시지 요소 (기본: <label>)
+                errorClass: "error-message", // CSS 클래스
+                highlight: function(element) {
+                    // 유효성 오류 발생 시 input 클래스를 추가
+                    $(element).addClass("input-error");
+                },
+                unhighlight: function(element) {
+                    // 유효성 오류 해결 시 클래스 제거
+                    $(element).removeClass("input-error");
+                },
+                errorPlacement: function(error, element) {
+                    // 에러 메시지 위치를 필드셋 내부에 배치
+                    if (element.closest("fieldset").length) {
+                        element.closest("fieldset").append(error);
+                    } else {
+                        error.insertAfter(element); // 기본 위치
+                    }
+                },
+                submitHandler: submitHandler // 외부에서 주입받은 함수 사용
+            };
+        },
+
     }
 }

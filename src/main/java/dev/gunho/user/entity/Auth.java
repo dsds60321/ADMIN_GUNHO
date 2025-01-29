@@ -1,12 +1,10 @@
-package dev.gunho.user.domain;
+package dev.gunho.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.gunho.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Description("user JWT token 테이블")
 @Entity

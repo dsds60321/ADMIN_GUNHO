@@ -1,4 +1,4 @@
-package dev.gunho.user.domain;
+package dev.gunho.user.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QAuth extends EntityPathBase<Auth> {
 
-    private static final long serialVersionUID = 994158031L;
+    private static final long serialVersionUID = -2123419120L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

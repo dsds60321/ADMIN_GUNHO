@@ -1,10 +1,12 @@
 const signIn = {
+
     init: function() {
         this.validateForm(); // 유효성 검사 초기화
     },
+
     validateForm: function() {
         const frm = $('#signInFrm'); // 폼 요소를 선택
-        console.log(frm);
+
         frm.validate(jqueryValidOptions.sign.in(async (frm) => {
             const { data } = await Post(frm.action, frm);
             if (data.result) {
@@ -17,10 +19,12 @@ const signIn = {
 };
 
 const signUp = {
+
     init: function() {
         this.validateForm(); // 유효성 검사 초기화
         this.emailAuth();
     },
+
     validateForm: function() {
         const frm = $('#signUpFrm'); // 폼 요소를 선택
         frm.validate(jqueryValidOptions.sign.up(async (frm) => {

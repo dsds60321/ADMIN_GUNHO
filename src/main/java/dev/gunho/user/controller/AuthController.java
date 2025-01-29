@@ -4,6 +4,7 @@ import dev.gunho.user.dto.EmailVeriftyDto;
 import dev.gunho.user.dto.UserDto;
 import dev.gunho.user.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +44,8 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     @ResponseBody
-    public ResponseEntity<?> signIn(HttpServletResponse response, @RequestBody final UserDto userDto) {
-        return authService.signIn(response, userDto);
+    public ResponseEntity<?> signIn(HttpSession session, HttpServletResponse response, @RequestBody final UserDto userDto) {
+        return authService.signIn(session, response, userDto);
     }
 
  }

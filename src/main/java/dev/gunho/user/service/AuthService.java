@@ -10,8 +10,8 @@ import dev.gunho.global.service.KafkaProducerService;
 import dev.gunho.global.util.IdUtil;
 import dev.gunho.global.util.SessionUtil;
 import dev.gunho.user.constant.UserRole;
-import dev.gunho.user.domain.Auth;
-import dev.gunho.user.domain.User;
+import dev.gunho.user.entity.Auth;
+import dev.gunho.user.entity.User;
 import dev.gunho.user.dto.EmailPayload;
 import dev.gunho.user.dto.EmailVeriftyDto;
 import dev.gunho.user.dto.UserDto;
@@ -19,8 +19,8 @@ import dev.gunho.user.mapper.UserMapper;
 import dev.gunho.user.repository.AuthRepository;
 import dev.gunho.user.repository.TemplateRepository;
 import dev.gunho.user.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +90,7 @@ public class AuthService {
 
     @Description("로그인")
     @Transactional
-    public ResponseEntity<?> signIn(HttpServletResponse response, UserDto userDto) {
+    public ResponseEntity<?> signIn(HttpSession session, HttpServletResponse response, UserDto userDto) {
 
         User user = userRepository.findByUserId(userDto.userId())
                 .orElseThrow(() -> new GlobalException(ApiResponseCode.NOT_FOUND));
@@ -109,6 +109,11 @@ public class AuthService {
         // RefreshToken을 HTTP-Only 쿠키로 설정
         SessionUtil.setCookie(response, "refreshToken", refreshToken, jwtProvider.getExpireFromToken(refreshToken) / 1000);
 
+        // session 등록
+        session.setAttribute("idx"     , user.getIdx());
+        session.setAttribute("userId"  , user.getUserId());
+        session.setAttribute("nick"    , user.getNick());
+        session.setAttribute("email"   , user.getEmail());
 
         if (authRepository.existsByUser(user)) {
             Auth auth = user.getAuth();
@@ -122,6 +127,7 @@ public class AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build());
+
 
 
         return ApiResponse.SUCCESS(ApiResponseCode.SUCCESS.getMessage(), auth);

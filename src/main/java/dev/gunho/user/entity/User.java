@@ -1,7 +1,9 @@
-package dev.gunho.user.domain;
+package dev.gunho.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.gunho.global.entity.BaseTimeEntity;
+import dev.gunho.rule.entity.Rule;
+import dev.gunho.stock.entity.Stock;
 import dev.gunho.user.constant.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -48,6 +52,12 @@ public class User extends BaseTimeEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Auth auth;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Stock> stocks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Rule> rules = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

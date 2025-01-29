@@ -1,4 +1,4 @@
-package dev.gunho.user.domain;
+package dev.gunho.user.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = 994751474L;
+    private static final long serialVersionUID = -2122825677L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -39,7 +39,11 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<dev.gunho.user.constant.UserRole> role = createEnum("role", dev.gunho.user.constant.UserRole.class);
 
+    public final ListPath<dev.gunho.rule.entity.Rule, dev.gunho.rule.entity.QRule> rules = this.<dev.gunho.rule.entity.Rule, dev.gunho.rule.entity.QRule>createList("rules", dev.gunho.rule.entity.Rule.class, dev.gunho.rule.entity.QRule.class, PathInits.DIRECT2);
+
     public final StringPath status = createString("status");
+
+    public final ListPath<dev.gunho.stock.entity.Stock, dev.gunho.stock.entity.QStock> stocks = this.<dev.gunho.stock.entity.Stock, dev.gunho.stock.entity.QStock>createList("stocks", dev.gunho.stock.entity.Stock.class, dev.gunho.stock.entity.QStock.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> udtDate = _super.udtDate;

@@ -3,3 +3,113 @@
     color: red;
     margin: 5px;
 }
+
+/* select2 화살표 숨김 */
+.select2-container .select2-selection__arrow {
+    display: none !important;
+}
+
+
+/* 기본 Select2 컨테이너 스타일 */
+.select2-container {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    width: 100% !important; /* Select 상자의 전체 너비 확장 */
+}
+
+/* 선택된 항목 영역 */
+.select2-container--default .select2-selection--single {
+    background-color: #f6f6f6;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    transition: border-color 0.2s ease-in-out
+}
+
+/* 호버 시 선택 상자 스타일 */
+.select2-container--default .select2-selection--single:hover {
+    border-color: #3498db;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+/* 선택 상자에 포커스 */
+.select2-container--default .select2-selection--single:focus {
+    border-color: #3498db !important;
+    outline: none;
+}
+
+/* 드롭다운 화살표 스타일 */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 플레이스홀더 텍스트 스타일 */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* 선택된 텍스트 스타일 */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #333;
+    font-weight: 600;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.select2-container--default .select2-dropdown {
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e4e4e4;
+    margin-top: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+/* 드롭다운 옵션 스타일 */
+.select2-container--default .select2-results__option {
+    padding: 10px 12px;
+    color: #333;
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* 옵션 Hover 스타일 */
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #3498db;
+    color: #fff;
+}
+
+/* 검색 박스 스타일 */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e4e4e4;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    transition: border-color 0.2s ease-in-out;
+}
+
+/* 검색 필드 포커스 시 스타일 */
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Clear 버튼 스타일 */
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    color: #e74c3c;
+    font-size: 12px;
+    font-weight: bold;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}

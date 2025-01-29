@@ -226,7 +226,7 @@
     flatAccordion(".flat-accordion1");
     uploadfile();
     preloader();
-    
+    util.init();
   });
 
 })(jQuery);

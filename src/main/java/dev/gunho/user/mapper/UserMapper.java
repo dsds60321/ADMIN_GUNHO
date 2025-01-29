@@ -1,6 +1,6 @@
 package dev.gunho.user.mapper;
 
-import dev.gunho.user.domain.User;
+import dev.gunho.user.entity.User;
 import dev.gunho.user.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

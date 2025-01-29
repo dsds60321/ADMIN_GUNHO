@@ -9,6 +9,9 @@ logging:
 
 
 spring:
+#  sql:
+#    init:
+#      mode: always
   devtools:
     livereload:
       enabled: true

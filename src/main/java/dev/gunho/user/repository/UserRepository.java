@@ -1,6 +1,6 @@
 package dev.gunho.user.repository;
 
-import dev.gunho.user.domain.User;
+import dev.gunho.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

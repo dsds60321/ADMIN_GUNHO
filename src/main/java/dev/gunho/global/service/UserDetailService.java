@@ -3,7 +3,7 @@ package dev.gunho.global.service;
 import dev.gunho.global.dto.ApiResponseCode;
 import dev.gunho.global.dto.UserDetail;
 import dev.gunho.global.exception.GlobalException;
-import dev.gunho.user.domain.User;
+import dev.gunho.user.entity.User;
 import dev.gunho.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

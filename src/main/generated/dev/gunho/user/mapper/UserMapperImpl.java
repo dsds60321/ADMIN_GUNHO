@@ -1,14 +1,14 @@
 package dev.gunho.user.mapper;
 
 import dev.gunho.user.constant.UserRole;
-import dev.gunho.user.domain.User;
 import dev.gunho.user.dto.UserDto;
+import dev.gunho.user.entity.User;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-01-29T13:15:24+0900",
+    date = "2025-01-29T19:34:02+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component

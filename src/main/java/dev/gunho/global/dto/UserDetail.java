@@ -1,6 +1,6 @@
 package dev.gunho.global.dto;
 
-import dev.gunho.user.domain.User;
+import dev.gunho.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

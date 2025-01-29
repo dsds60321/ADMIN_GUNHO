@@ -53,8 +53,12 @@ public class SecurityConfig {
                     request.requestMatchers("/auth/**").permitAll()
                             .anyRequest().authenticated();
                 })
+//                세션 사용하는 방식으로 변경
+//                .sessionManagement(sessionManagement -> {
+//                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                })
                 .sessionManagement(sessionManagement -> {
-                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
                 })
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint());

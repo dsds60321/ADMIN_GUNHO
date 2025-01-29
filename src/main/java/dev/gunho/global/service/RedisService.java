@@ -13,10 +13,6 @@ public class RedisService {
 
     private final StringRedisTemplate stringRedisTemplate;
 
-    public boolean hasKey(String key) {
-        return stringRedisTemplate.hasKey(key);
-    }
-
     public void set(String key, String value) {
         stringRedisTemplate.opsForValue().set(key, value);
     }
@@ -33,6 +29,7 @@ public class RedisService {
         stringRedisTemplate.opsForList().rightPushAll(key, values);
     }
 
+
     // Redis List - 데이터 추가 (맨 뒤에 추가: RPUSH)
     public void addToListRight(String key, String value) {
         stringRedisTemplate.opsForList().rightPush(key, value);
@@ -43,14 +40,33 @@ public class RedisService {
         return stringRedisTemplate.opsForList().range(key, 0, -1);
     }
 
-    public List<String> getRange(String key, int start, int end) {
+    public List<String> getRangeList(int start, int end, String key) {
         return stringRedisTemplate.opsForList().range(key, start, end);
+    }
+
+    public void setHash(String hashKey, String key, String value) {
+        stringRedisTemplate.opsForHash().put(hashKey, key, value);
+    }
+
+    public boolean existsByKey(String symbol) {
+        return stringRedisTemplate.hasKey(symbol);
     }
 
     public Map<Object, Object> getHashEntries(String key) {
         return stringRedisTemplate.opsForHash().entries(key);
     }
 
+    public void deleteHashKey(String hashKey, Object key) {
+        stringRedisTemplate.opsForHash().delete(hashKey, key);
+    }
 
+    public boolean isHashKeyExists(String hashName, String key) {
+        return stringRedisTemplate.opsForHash().hasKey(hashName, key);
+    }
+
+    // Hash에 여러 필드-값 쌍 저장
+    public void addAllToHash(String hashKey, Map<String, Object> data) {
+        stringRedisTemplate.opsForHash().putAll(hashKey, data);
+    }
 
 }

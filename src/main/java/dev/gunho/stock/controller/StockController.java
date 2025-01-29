@@ -17,14 +17,8 @@ public class StockController {
 
     private final StockService stockService;
 
-    @GetMapping("/top")
-    @ResponseBody
-    public ResponseEntity<?> getTopInfo() {
-        return stockService.getTopStockData();
-    }
-
-    @GetMapping("/reference")
-    public @ResponseBody String test(){
-        return stockService.Intraday();
+    @GetMapping("/symbols")
+    public @ResponseBody ResponseEntity<?> getSymbols() {
+        return stockService.getSymbols();
     }
 }
