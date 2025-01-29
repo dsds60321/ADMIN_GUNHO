@@ -1,4 +1,4 @@
-package dev.gunho.toooy.global.entity;
+package dev.gunho.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

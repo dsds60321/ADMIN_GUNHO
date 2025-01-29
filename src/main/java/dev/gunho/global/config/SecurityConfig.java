@@ -1,6 +1,6 @@
-package dev.gunho.toooy.global.config;
+package dev.gunho.global.config;
 
-import dev.gunho.toooy.global.filter.JwtFilter;
+import dev.gunho.global.filter.JwtFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +39,17 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> {
+                            request.requestMatchers(
+                                    "/css/**",       // CSS 파일
+                                    "/font/**",       // CSS 파일
+                                    "/icon/**",       // CSS 파일
+                                    "/images/**",       // CSS 파일
+                                    "/js/**",       // CSS 파일
+                                    "/scss/**",       // CSS 파일
+                                    "/favicon.ico"   // 파비콘
+                            ).permitAll();
+
+
                     request.requestMatchers("/auth/**").permitAll()
                             .anyRequest().authenticated();
                 })
@@ -48,19 +59,18 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
                 })
-                .addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);;
+                .addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         return httpSecurity.build();
     }
 
 
+    // 로그인 페이지 리다이렉트
     static class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("{\"code\": \"403\", \"message\": \"No Permission.\"}");
+            response.sendRedirect("/auth/sign-in");
         }
     }
 }

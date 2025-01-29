@@ -1,4 +1,15 @@
 package dev.gunho.global.dto;
 
-public class KafkaMessage {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class KafkaMessage<T> {
+
+    private String requestId;
+    private T payload;
+
 }

@@ -1,32 +1,50 @@
-package dev.gunho.toooy.user.controller;
+package dev.gunho.user.controller;
 
-import dev.gunho.toooy.global.dto.ApiResponse;
-import dev.gunho.toooy.user.dto.UserDto;
-import dev.gunho.toooy.user.service.AuthService;
+import dev.gunho.user.dto.EmailVeriftyDto;
+import dev.gunho.user.dto.UserDto;
+import dev.gunho.user.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Description("로그인")
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
 
+    @GetMapping("/sign-in")
+    public ModelAndView signIn() {
+        return new ModelAndView("/pages/sign/sign-in","_csrf", authService.getCsrf());
+    }
+
+    @PostMapping("/verify/email")
+    @ResponseBody
+    public ResponseEntity<?> send(@RequestBody final EmailVeriftyDto emailVeriftyDto) {
+        return authService.verifyEmail(emailVeriftyDto);
+    }
+
+    @GetMapping("/sign-up")
+    public ModelAndView signUp() {
+        return new ModelAndView("/pages/sign/sign-up","_csrf", authService.getCsrf());
+    }
+
     @PostMapping("/sign-up")
+    @ResponseBody
     public ResponseEntity<?> signUp(@RequestBody final UserDto userDto) {
         return authService.signUp(userDto);
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<?> signIn(@RequestBody final UserDto userDto) {
-        return authService.signIn(userDto);
+    @ResponseBody
+    public ResponseEntity<?> signIn(HttpServletResponse response, @RequestBody final UserDto userDto) {
+        return authService.signIn(response, userDto);
     }
 
  }

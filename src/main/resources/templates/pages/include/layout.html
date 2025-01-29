@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="~{/pages/include/head :: head}">
+</head>
+<body>
+<th:block>
+    <div id="wrapper">
+        <div id="page" class="">
+            <!-- layout-wrap -->
+            <div class="layout-wrap">
+                <!-- preload -->
+                <div id="preload" class="preload-container">
+                    <div class="preloading">
+                        <span></span>
+                    </div>
+                </div>
+
+                <!-- 사이드바 -->
+                <div th:replace="~{/pages/include/sidebar :: sidebar}"></div>
+                <!-- 컨텐츠 -->
+                <div class="section-content-right">
+
+                    <div th:replace="~{/pages/include/header-dashboard :: header-dashboard}"></div>
+
+                    <div class="main-content">
+                        <div class="main-content-inner">
+                            <div class="main-content-wrap">
+                                <section layout:fragment="content" th:remove="tag"></section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+<div th:replace="~{/pages/include/import :: import}"></div>
+</body>
+</html>

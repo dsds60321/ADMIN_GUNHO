@@ -1,4 +1,4 @@
-package dev.gunho.toooy.global.filter;
+package dev.gunho.global.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

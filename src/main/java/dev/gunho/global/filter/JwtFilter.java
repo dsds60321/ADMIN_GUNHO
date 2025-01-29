@@ -1,9 +1,10 @@
-package dev.gunho.toooy.global.filter;
+package dev.gunho.global.filter;
 
-import dev.gunho.toooy.global.provider.JwtProvider;
-import dev.gunho.toooy.global.service.UserDetailService;
+import dev.gunho.global.provider.JwtProvider;
+import dev.gunho.global.service.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        String accessToken = getTokenFromRequest(request);
+        String accessToken = getTokenFromCookie(request, "accessToken");
         if (accessToken != null && jwtProvider.validateToken(accessToken)) {
             UsernamePasswordAuthenticationToken authentication = getAuthenticationFromToken(accessToken);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -38,13 +38,18 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getTokenFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+    private String getTokenFromCookie(HttpServletRequest request, String tokenName) {
+        // HTTP Only 쿠키에서 JWT 토큰 추출
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (tokenName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
         }
         return null;
     }
+
 
     private UsernamePasswordAuthenticationToken getAuthenticationFromToken(String token) {
         Long idx = jwtProvider.getIdxFromToken(token);

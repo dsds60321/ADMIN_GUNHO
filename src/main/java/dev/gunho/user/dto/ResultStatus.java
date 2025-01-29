@@ -1,4 +1,4 @@
-package dev.gunho.toooy.user.dto;
+package dev.gunho.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

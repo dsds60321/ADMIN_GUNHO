@@ -1,6 +1,6 @@
-package dev.gunho.toooy.global.provider;
+package dev.gunho.global.provider;
 
-import dev.gunho.toooy.global.dto.TooyUserDetail;
+import dev.gunho.global.dto.UserDetail;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -47,7 +47,7 @@ public class JwtProvider {
     }
 
     public String generateToken(Authentication authentication, long timeout) {
-        TooyUserDetail userDetails = (TooyUserDetail) authentication.getPrincipal();
+        UserDetail userDetails = (UserDetail) authentication.getPrincipal();
         Date expiryDate = Date.from(Instant.now().plus(timeout, ChronoUnit.SECONDS));
 
         return Jwts.builder()
@@ -56,7 +56,7 @@ public class JwtProvider {
                 .claim("userId" , userDetails.getUsername())
                 .claim("email"  , userDetails.getEmail())
                 .claim("nick"   , userDetails.getNick())
-                .claim("os"   , userDetails.getOs())
+                .claim("status"   , userDetails.getStatus())
                 .claim("uuid"   , userDetails.getUuid())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
@@ -74,6 +74,10 @@ public class JwtProvider {
 
     public Long getIdxFromToken(String token) {
         return parseClaims(token).get("idx", Long.class);
+    }
+
+    public Integer getExpireFromToken(String token) {
+        return parseClaims(token).get("exp", Integer.class);
     }
 
     public Long getUserIdFromToken(String token) {

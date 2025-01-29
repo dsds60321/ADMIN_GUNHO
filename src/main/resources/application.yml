@@ -1,32 +1,65 @@
 server:
-  port: 80
-#  address: localhost
+  port: 8080
 
 logging:
   level:
     org:
-      hibernate: DEBUG
+      hibernate: INFO
+      apache.kafka: OFF
+
 
 spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+      additional-paths: src/main/resources
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    check-template: true
+    check-template-location: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
   datasource:
-    url: jdbc:mariadb://localhost:3306/TOOY  # 데이터베이스 URL
+    url: jdbc:mariadb://localhost:3306/HOMEPAGE  # 데이터베이스 URL
     username: root                                  # 데이터베이스 사용자 이름
     password: 12345
     driver-class-name: org.mariadb.jdbc.Driver              # MariaDB 드라이버 클래스 이름
   jpa:
     hibernate:
-      ddl-auto: create-drop                                      # 데이터베이스 스키마 자동 생성 전략 (none, update, create, create-drop 중 선택)
+      ddl-auto: update                                      # 데이터베이스 스키마 자동 생성 전략 (none, update, create, create-drop 중 선택)
     show-sql: true                                          # SQL 쿼리 로그 출력 여부
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
         dialect: org.hibernate.dialect.MariaDBDialect      # MariaDB Dialect 설정
-#  kafka:
-#    bootstrap-servers: localhost:9092
+#        카프카 설정
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: producer-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 # JWT
 jwt:
   secret: bf91149297f98761d4266feb805e1c6f3164bd01fffe0796c746b74041c0a6a4652dc4a8dc1f7ce32e56e5b950efbf818594fee07f76497c52e75c10ae7f8582
   access-time: 3600 # 1H
   refresh-time: 604800 # 7D
+
+# https://www.alphavantage.co/documentation/
+# thirdparty
+api:
+  alpha-vantage:
+    host: https://www.alphavantage.co
+    key : ZOR7FVZEPQH10QSL
+

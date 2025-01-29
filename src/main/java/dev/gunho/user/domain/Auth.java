@@ -1,7 +1,7 @@
-package dev.gunho.toooy.user.domain;
+package dev.gunho.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dev.gunho.toooy.global.entity.BaseTimeEntity;
+import dev.gunho.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
@@ -9,11 +9,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Description("user JWT token 테이블")
-@Entity(name = "auth")
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
+@Table(name = "auth")
 public class Auth extends BaseTimeEntity {
 
     @Id

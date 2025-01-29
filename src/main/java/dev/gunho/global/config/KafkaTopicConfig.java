@@ -1,4 +1,4 @@
-//package dev.gunho.toooy.global.config;
+package dev.gunho.global.config;//package dev.gunho.toooy.global.config;
 //
 //import org.apache.kafka.clients.admin.NewTopic;
 //import org.springframework.context.annotation.Bean;

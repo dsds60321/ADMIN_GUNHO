@@ -1,6 +1,6 @@
-package dev.gunho.toooy.global.config;
+package dev.gunho.global.config;
 
-import dev.gunho.toooy.global.filter.LogFilter;
+import dev.gunho.global.filter.LogFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,7 @@
-package dev.gunho.toooy.global.advice;
+package dev.gunho.global.advice;
 
-import dev.gunho.toooy.global.dto.ApiResponse;
-import dev.gunho.toooy.global.dto.ApiResponseCode;
+import dev.gunho.global.dto.ApiResponse;
+import dev.gunho.global.dto.ApiResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

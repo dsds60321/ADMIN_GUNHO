@@ -4,17 +4,17 @@ import dev.gunho.global.dto.ApiResponseCode;
 import lombok.Getter;
 
 @Getter
-public class TooyException extends RuntimeException{
+public class GlobalException extends RuntimeException{
     private final int status;
 
 
 
-    public TooyException(String message, int status) {
+    public GlobalException(String message, int status) {
         super(message);
         this.status = status;
     }
 
-    public TooyException(ApiResponseCode responseCode) {
+    public GlobalException(ApiResponseCode responseCode) {
         super(responseCode.getMessage());
         this.status = responseCode.getCode();
     }

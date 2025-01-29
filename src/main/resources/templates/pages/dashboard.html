@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{pages/include/layout}">
+<body>
+<div layout:fragment="content">
+
+    <!-- 시가 총액 TOP 10 -->
+    <div class="full-width mb-30">
+        <!-- seller-statistic -->
+        <div class="wg-box">
+            <div class="flex items-center justify-between">
+                <h5>Revenue</h5>
+                <div class="dropdown default style-box">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a href="product-list.html" class="view-all">Yearly<i class="icon-chevron-down"></i></a>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="javascript:void(0);">Weekly</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">Monthly</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap40">
+                <div>
+                    <div class="mb-1">
+                        <div class="block-legend">
+                            <div class="dot t7"></div>
+                            <div class="text-tiny">Revenue</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap12">
+                        <h4>$2337,802</h4>
+                        <div class="box-icon-trending up">
+                            <i class="icon-trending-up"></i>
+                            <div class="body-title number text-grey">0.56%</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="mb-1">
+                        <div class="block-legend">
+                            <div class="dot t5"></div>
+                            <div class="text-tiny">Store</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap12">
+                        <h4>$28,305</h4>
+                        <div class="box-icon-trending up">
+                            <i class="icon-trending-up"></i>
+                            <div class="body-title number text-grey">0.56%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="line-chart-22"></div>
+        </div>
+        <!-- /seller-statistic -->
+    </div>
+    <script src="/js/pages/dashboard.js"></script>
+</div>
+</body>

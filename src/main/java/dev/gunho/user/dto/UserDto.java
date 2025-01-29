@@ -1,12 +1,14 @@
-package dev.gunho.toooy.user.dto;
+package dev.gunho.user.dto;
 
-import dev.gunho.toooy.user.constant.UserRole;
+import dev.gunho.user.constant.UserRole;
 
 public record UserDto(
         String userId,
         String password,
         String email,
         String nick,
+        String _csrf,
+        String emailAuth,
         UserRole role
 ) {
     // 유효성 검증 메소드 추가 가능
@@ -21,6 +23,7 @@ public record UserDto(
     }
 
     public UserDto setSignUp(String encPassword, UserRole role) {
-        return new UserDto(userId, encPassword, email, nick, role);
+        return new UserDto(userId, encPassword, email, nick, "", "", role);
     }
 }
+

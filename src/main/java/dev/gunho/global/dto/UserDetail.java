@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class TooyUserDetail implements UserDetails {
+public class UserDetail implements UserDetails {
 
     private final User user;
-    public TooyUserDetail(User user) {
+    public UserDetail(User user) {
         this.user = user;
     }
 
@@ -43,7 +43,7 @@ public class TooyUserDetail implements UserDetails {
         return user.getUuid();
     }
 
-    public String getOs() {return user.getOs();}
+    public String getStatus() {return user.getStatus();}
 
     @Override
     public String getPassword() {

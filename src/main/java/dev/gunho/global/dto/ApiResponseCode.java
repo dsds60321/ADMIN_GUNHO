@@ -1,4 +1,4 @@
-package dev.gunho.toooy.global.dto;
+package dev.gunho.global.dto;
 
 import lombok.Getter;
 

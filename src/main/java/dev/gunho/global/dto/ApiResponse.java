@@ -1,4 +1,4 @@
-package dev.gunho.toooy.global.dto;
+package dev.gunho.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,13 +14,15 @@ public class ApiResponse<T> {
 
     private int code;
     private String message;
-    private T result;
+    private T res;
+    private boolean result;
 
     public static <T> ResponseEntity<ApiResponse<T>> SUCCESS() {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.SUCCESS.getCode())
                 .message(ApiResponseCode.SUCCESS.getMessage())
-                .result(null)
+                .res(null)
+                .result(true)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -30,7 +32,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.SUCCESS.getCode())
                 .message(message)
-                .result(null)
+                .res(null)
+                .result(true)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -40,7 +43,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.SUCCESS.getCode())
                 .message(message)
-                .result(data)
+                .res(data)
+                .result(true)
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -51,7 +55,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.BAD_REQUEST.getCode())
                 .message(ApiResponseCode.BAD_REQUEST.getMessage())
-                .result(null)
+                .res(null)
+                .result(false)
                 .build();
 
         return ResponseEntity.badRequest().body(response);
@@ -61,7 +66,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.BAD_REQUEST.getCode())
                 .message(message)
-                .result(null)
+                .res(null)
+                .result(false)
                 .build();
 
         return ResponseEntity.badRequest().body(response);
@@ -71,7 +77,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.BAD_REQUEST.getCode())
                 .message(message)
-                .result(obj)
+                .res(obj)
+                .result(false)
                 .build();
 
         return ResponseEntity.badRequest().body(response);
@@ -81,7 +88,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.FORBIDDEN.getCode())
                 .message(ApiResponseCode.FORBIDDEN.getMessage())
-                .result(null)
+                .res(null)
+                .result(false)
                 .build();
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
@@ -91,7 +99,7 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.EXPIRED_TOKEN.getCode())
                 .message(ApiResponseCode.EXPIRED_TOKEN.getMessage())
-                .result(null)
+                .res(null)
                 .build();
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -101,7 +109,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.NOT_FOUND.getCode())
                 .message(ApiResponseCode.NOT_FOUND.getMessage())
-                .result(data)
+                .res(data)
+                .result(false)
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -111,7 +120,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(code)
                 .message(message)
-                .result(null)
+                .res(null)
+                .result(false)
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -121,7 +131,8 @@ public class ApiResponse<T> {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.INTERNAL_SERVER_ERROR.getCode())
                 .message(ApiResponseCode.INTERNAL_SERVER_ERROR.getMessage())
-                .result(null)
+                .res(null)
+                .result(false)
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

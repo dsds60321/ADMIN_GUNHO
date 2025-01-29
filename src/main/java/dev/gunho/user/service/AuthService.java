@@ -1,39 +1,63 @@
-package dev.gunho.toooy.user.service;
+package dev.gunho.user.service;
 
-import dev.gunho.toooy.global.dto.ApiResponse;
-import dev.gunho.toooy.global.dto.ApiResponseCode;
-import dev.gunho.toooy.global.dto.TooyUserDetail;
-import dev.gunho.toooy.global.exception.TooyException;
-import dev.gunho.toooy.global.provider.JwtProvider;
-import dev.gunho.toooy.user.constant.UserRole;
-import dev.gunho.toooy.user.domain.Auth;
-import dev.gunho.toooy.user.domain.QAuth;
-import dev.gunho.toooy.user.domain.QUser;
-import dev.gunho.toooy.user.dto.UserDto;
-import dev.gunho.toooy.user.domain.User;
-import dev.gunho.toooy.user.mapper.UserMapper;
-import dev.gunho.toooy.user.repository.AuthRepository;
-import dev.gunho.toooy.user.repository.UserRepository;
+import dev.gunho.global.dto.ApiResponse;
+import dev.gunho.global.dto.ApiResponseCode;
+import dev.gunho.global.dto.UserDetail;
+import dev.gunho.global.entity.Template;
+import dev.gunho.global.exception.GlobalException;
+import dev.gunho.global.provider.JwtProvider;
+import dev.gunho.global.service.KafkaProducerService;
+import dev.gunho.global.util.IdUtil;
+import dev.gunho.global.util.SessionUtil;
+import dev.gunho.user.constant.UserRole;
+import dev.gunho.user.domain.Auth;
+import dev.gunho.user.domain.User;
+import dev.gunho.user.dto.EmailPayload;
+import dev.gunho.user.dto.EmailVeriftyDto;
+import dev.gunho.user.dto.UserDto;
+import dev.gunho.user.mapper.UserMapper;
+import dev.gunho.user.repository.AuthRepository;
+import dev.gunho.user.repository.TemplateRepository;
+import dev.gunho.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.Optional;
+import java.time.Duration;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthService {
 
+    private static final String CSRF_KEY = "SESSION|CSRF|%s";
+    private static final String EMAIL_VERIFY_KEY = "SESSION|EMAIL|%s";
+
     private final JwtProvider jwtProvider;
+    private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
+    private final StringRedisTemplate stringRedisTemplate;
+    private final KafkaProducerService kafkaProducerService;
+
+    public String getCsrf() {
+        // CSRF 키
+        String csrf = IdUtil.generateId();
+        String redisKey = String.format(CSRF_KEY, csrf);
+        // 이메일 인증에 사용할 코드
+        stringRedisTemplate.opsForValue().set(redisKey, IdUtil.randomNumber(), Duration.ofMinutes(30));
+        return csrf;
+    }
 
     @Description("회원가입")
     @Transactional
@@ -45,6 +69,18 @@ public class AuthService {
             return ApiResponse.BAD_REQUEST("이미 존재하는 계정입니다.");
         }
 
+        // CSRF 값에 이메일 인증 값들어있음 값 확인
+        String redisKey = String.format(CSRF_KEY, userDto._csrf());
+        String emailAuth = stringRedisTemplate.opsForValue().get(redisKey);
+
+        if (emailAuth == null) {
+            return ApiResponse.BAD_REQUEST("만료된 인증코드입니다. 재 발송하여 다시 입력해주세요.");
+        }
+
+        if (!emailAuth.equals(userDto.emailAuth())) {
+            return ApiResponse.BAD_REQUEST("이메일 인증코드가 일치하지 않습니다.");
+        }
+
 
         User user = UserMapper.INSTANCE.toEntity(userDto.setSignUp(passwordEncoder.encode(userDto.password()), UserRole.DEFAULT));
         User resEntity = userRepository.save(user);
@@ -54,18 +90,25 @@ public class AuthService {
 
     @Description("로그인")
     @Transactional
-    public ResponseEntity<?> signIn(UserDto userDto) {
+    public ResponseEntity<?> signIn(HttpServletResponse response, UserDto userDto) {
 
         User user = userRepository.findByUserId(userDto.userId())
-                .orElseThrow(() -> new TooyException(ApiResponseCode.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(ApiResponseCode.NOT_FOUND));
 
         if (!passwordEncoder.matches(userDto.password(), user.getPassword())) {
             return ApiResponse.BAD_REQUEST("패스워드가 일치하지 않습니다.");
         }
 
 
-        String accessToken = jwtProvider.generateAccessToken(new UsernamePasswordAuthenticationToken(new TooyUserDetail(user), user.getPassword()));
-        String refreshToken = jwtProvider.generateRefreshToken(new UsernamePasswordAuthenticationToken(new TooyUserDetail(user), user.getPassword()));
+        String accessToken = jwtProvider.generateAccessToken(new UsernamePasswordAuthenticationToken(new UserDetail(user), user.getPassword()));
+        String refreshToken = jwtProvider.generateRefreshToken(new UsernamePasswordAuthenticationToken(new UserDetail(user), user.getPassword()));
+
+
+        // AccessToken을 HTTP-Only 쿠키로 설정
+        SessionUtil.setCookie(response, "accessToken", accessToken, jwtProvider.getExpireFromToken(accessToken) / 1000);
+        // RefreshToken을 HTTP-Only 쿠키로 설정
+        SessionUtil.setCookie(response, "refreshToken", refreshToken, jwtProvider.getExpireFromToken(refreshToken) / 1000);
+
 
         if (authRepository.existsByUser(user)) {
             Auth auth = user.getAuth();
@@ -84,5 +127,40 @@ public class AuthService {
         return ApiResponse.SUCCESS(ApiResponseCode.SUCCESS.getMessage(), auth);
     }
 
-    
+
+    public ResponseEntity<?> verifyEmail(EmailVeriftyDto emailVeriftyDto) {
+        Template template = templateRepository.getById("EMAIL_VERIFY");
+
+        // CSRF 인증 값이 담긴 키
+        String csrfRedisKey = String.format(CSRF_KEY, emailVeriftyDto.csrf());
+        // email 전송 상태에 따른 레디스
+        String emailAuthRedisKey = String.format(EMAIL_VERIFY_KEY, emailVeriftyDto.csrf());
+
+        String emailAuthValue = stringRedisTemplate.opsForValue().get(emailAuthRedisKey);
+
+        if (StringUtils.hasText(emailAuthValue)) {
+            return ApiResponse.BAD_REQUEST("인증 요청이 발송된 메일입니다. 5분 후 재발송 가능합니다.");
+        }
+
+
+        String authNo = stringRedisTemplate.opsForValue().get(csrfRedisKey);
+        // 메일 중복 발송 막기 위해
+        stringRedisTemplate.opsForValue().set(emailAuthRedisKey, "SEND", Duration.ofMinutes(5));
+
+
+        if (!StringUtils.hasText(authNo)) {
+            return ApiResponse.BAD_REQUEST("유효시간이 만료되었습니다.");
+        }
+
+        String contents = String.format(template.getContent(), authNo);
+        EmailPayload payload = EmailPayload.builder()
+                .to(emailVeriftyDto.email())
+                .subject(template.getSubject())
+                .from(template.getFrom())
+                .contents(contents)
+                .build();
+
+        kafkaProducerService.sendMessage("email-topic", payload);
+        return ApiResponse.SUCCESS();
+    }
 }
