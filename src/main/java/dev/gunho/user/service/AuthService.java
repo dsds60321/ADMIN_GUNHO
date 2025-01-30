@@ -109,12 +109,6 @@ public class AuthService {
         // RefreshToken을 HTTP-Only 쿠키로 설정
         SessionUtil.setCookie(response, "refreshToken", refreshToken, jwtProvider.getExpireFromToken(refreshToken) / 1000);
 
-        // session 등록
-        session.setAttribute("idx"     , user.getIdx());
-        session.setAttribute("userId"  , user.getUserId());
-        session.setAttribute("nick"    , user.getNick());
-        session.setAttribute("email"   , user.getEmail());
-
         if (authRepository.existsByUser(user)) {
             Auth auth = user.getAuth();
             auth.updateAccessToken(accessToken);

@@ -149,8 +149,8 @@ const jqueryValidOptions = {
         }
     },
 
-    // RULE
-    rule : {
+    // STOCK
+    stock : {
         add: function(submitHandler) {
             return {
                 rules: {

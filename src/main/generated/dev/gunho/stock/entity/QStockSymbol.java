@@ -23,6 +23,8 @@ public class QStockSymbol extends EntityPathBase<StockSymbol> {
 
     public final StringPath industry = createString("industry");
 
+    public final NumberPath<java.math.BigDecimal> lastSale = createNumber("lastSale", java.math.BigDecimal.class);
+
     public final NumberPath<java.math.BigDecimal> marketCap = createNumber("marketCap", java.math.BigDecimal.class);
 
     public final StringPath name = createString("name");

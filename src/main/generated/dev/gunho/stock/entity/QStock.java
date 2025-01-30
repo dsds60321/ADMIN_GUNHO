@@ -26,7 +26,7 @@ public class QStock extends EntityPathBase<Stock> {
 
     public final NumberPath<Double> averagePrice = createNumber("averagePrice", Double.class);
 
-    public final NumberPath<Double> buyTargetPrice = createNumber("buyTargetPrice", Double.class);
+    public final NumberPath<Double> buyPrice = createNumber("buyPrice", Double.class);
 
     public final StringPath currency = createString("currency");
 
@@ -37,9 +37,9 @@ public class QStock extends EntityPathBase<Stock> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
-    public final dev.gunho.rule.entity.QRule rules;
+    public final dev.gunho.rule.entity.QRule rule;
 
-    public final NumberPath<Double> sellTargetPrice = createNumber("sellTargetPrice", Double.class);
+    public final NumberPath<Double> sellPrice = createNumber("sellPrice", Double.class);
 
     public final StringPath symbol = createString("symbol");
 
@@ -66,7 +66,7 @@ public class QStock extends EntityPathBase<Stock> {
 
     public QStock(Class<? extends Stock> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.rules = inits.isInitialized("rules") ? new dev.gunho.rule.entity.QRule(forProperty("rules"), inits.get("rules")) : null;
+        this.rule = inits.isInitialized("rule") ? new dev.gunho.rule.entity.QRule(forProperty("rule"), inits.get("rule")) : null;
         this.user = inits.isInitialized("user") ? new dev.gunho.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 

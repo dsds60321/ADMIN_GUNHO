@@ -30,9 +30,9 @@ public class Stock extends BaseTimeEntity {
 
     private Double averagePrice; // 평단가
 
-    private Double buyTargetPrice; // 매수 목표가
+    private Double buyPrice; // 매수 목표가
 
-    private Double sellTargetPrice; // 매도 목표가
+    private Double sellPrice; // 매도 목표가
 
 
     // User와의 N:1 관계 추가
@@ -42,6 +42,6 @@ public class Stock extends BaseTimeEntity {
 
     // Stock과 Rule의 1:N 관계 추가
     @OneToOne(mappedBy = "stock", cascade = CascadeType.REMOVE)
-    private Rule rules;
+    private Rule rule;
 
 }

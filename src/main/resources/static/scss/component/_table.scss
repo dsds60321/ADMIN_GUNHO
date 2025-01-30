@@ -44,7 +44,7 @@
         > * {
             min-width: 1492px;
         }
-       
+
         .wg-product,
         ul.table-title {
             padding: 12px;
@@ -174,7 +174,7 @@
         }
         .wg-product {
             padding: 12px;
-            border-radius: 12px; 
+            border-radius: 12px;
             gap: 40px;
             @include transition3;
             > div {
@@ -329,4 +329,47 @@
             }
         }
     }
+    &.table-stock {
+        > * {
+            min-width: 600px;
+        }
+        ul.table-title {
+            padding: 12px;
+            border-radius: 12px;
+            background: var(--Surface-3);
+            li {
+                width: 100%;
+                &:last-child {
+                    width: 130px;
+                    flex-shrink: 0;
+                }
+            }
+        }
+        .stock-item {
+            padding: 23px 12px 19px;
+            border-radius: 12px;
+            @include transition3;
+            > div {
+                width: 100%;
+                &:last-child {
+                    width: 130px;
+                    flex-shrink: 0;
+                }
+            }
+            &:nth-child(2n+1) {
+                background: var(--Surface-3);
+            }
+            &:hover {
+                background-color: var(--hv-item) !important;
+            }
+        }
+        &.lg {
+            .attribute-item {
+                padding: 23px 12px 19px;
+            }
+        }
+    }
 }
+
+
+

@@ -113,3 +113,67 @@
     justify-content: center;
     padding: 0 10px;
 }
+
+
+
+
+
+
+/* 테이블 전체를 감싸는 컨테이너 */
+/* 테이블 전체 컨테이너 */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    -webkit-overflow-scrolling: touch; /* 부드러운 스크롤 지원 (iOS) */
+    border-radius: 8px;
+}
+
+/* 테이블 스타일 */
+.data-table {
+    border: none;
+    width: 100%;
+    min-width: 700px; /* 테이블 최소 너비 */
+    border-collapse: collapse; /* 테두리를 없앰 */
+    font-family: "Arial", sans-serif;
+}
+
+/* 헤더 스타일 */
+.data-table th {
+    border: none;
+    background-color: #f1f1f1; /* 헤더 배경색 */
+    text-align: center;
+    padding: 14px 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* 데이터 셀 스타일 */
+.data-table td {
+    text-align: center;
+    border: none;
+    padding: 12px 10px;
+    font-size: 12px;
+}
+
+/* 짝수 행 스타일 */
+.data-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* 밝은 회색 */
+}
+
+/* 홀수 행 스타일 */
+.data-table tr:nth-child(odd) {
+    background-color: #ffffff; /* 흰색 */
+}
+
+/* 호버 시 강조 */
+.data-table tr:hover {
+    background-color: var(--hv-item); /* 연한 파란색으로 강조 */
+}
+
+/* 작은 화면에서도 가독성 유지 */
+@media (max-width: 768px) {
+    .data-table th, .data-table td {
+        font-size: 12px; /* 폰트 크기를 줄임 */
+        padding: 10px 8px; /* 셀 간격 조정 */
+    }
+}

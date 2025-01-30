@@ -12,7 +12,7 @@
             <div class="center">
                 <div class="center-item">
                     <ul class="">
-                        <li class="menu-item active">
+                        <li class="menu-item" id="dashboard-menu">
                             <a href="/" class="">
                                 <div class="icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,20 +22,20 @@
                                 <div class="text">DASHBOARD</div>
                             </a>
                         </li>
-                        <li class="menu-item has-children">
+                        <li class="menu-item has-children" id="stock-menu">
                             <a href="javascript:void(0);" class="menu-item-button">
                                 <div class="icon"><i class="icon-layers"></i></div>
                                 <div class="text">주식 관리</div>
                             </a>
                             <ul class="sub-menu">
                                 <li class="sub-menu-item">
-                                    <a href="/rule/add" class="">
-                                        <div class="text">등록</div>
+                                    <a href="/stock/form" class="">
+                                        <div class="text">관리</div>
                                     </a>
                                 </li>
                                 <li class="sub-menu-item">
-                                    <a href="add-product.html" class="">
-                                        <div class="text">주식 관리</div>
+                                    <a href="/rule/form" class="">
+                                        <div class="text">룰 관리</div>
                                     </a>
                                 </li>
                             </ul>

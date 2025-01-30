@@ -54,9 +54,11 @@ public class User extends BaseTimeEntity {
     private Auth auth;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
     private List<Stock> stocks = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
     private List<Rule> rules = new ArrayList<>();
 
     @Override

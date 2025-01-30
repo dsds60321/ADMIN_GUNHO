@@ -103,5 +103,43 @@ const util = {
 
             select2Elem.val(value).trigger("change");
         }
+    },
+
+
+
+    // 갖에 이벤트 실행
+    evt : {
+        trigger: function (elem, type) {
+            const currentEvent = new Event(type); // 커스텀 이벤트 생성
+            elem.dispatchEvent(currentEvent); // 강제로 change 이벤트 호출
+        },
+        click : function (elem, fn) {
+            elem.addEventListener('click', fn);
+        },
+        change : function (elem, fn) {
+            elem.addEventListener('change', fn);
+        },
+        input : function (elem, fn) {
+            elem.addEventListener('input', fn)
+        },
+        focusOut: function (elem, fn, isSync = false) {
+            elem.addEventListener('focusout', isSync ?  (async () => fn) : fn)
+        },
+    },
+
+
+
+    display : {
+        selectedSidebar : function (sidenavId, subSideNo) {
+            const sidenav = document.getElementById(sidenavId);
+            if (sidenav) {
+                sidenav.classList.add('active');
+            }
+
+            if (subSideNo) {
+                sidenav.querySelectorAll('ul > li')[subSideNo - 1].classList.add('active');
+            }
+        }
     }
+
 }

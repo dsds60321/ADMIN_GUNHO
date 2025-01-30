@@ -28,6 +28,17 @@ public class ApiResponse<T> {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    public static <T> ResponseEntity<ApiResponse<T>> SUCCESS(T body) {
+        ApiResponse<T> response = ApiResponse.<T>builder()
+                .code(ApiResponseCode.SUCCESS.getCode())
+                .message(ApiResponseCode.SUCCESS.getMessage())
+                .res(body)
+                .result(true)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     public static <T> ResponseEntity<ApiResponse<T>> SUCCESS(String message) {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.SUCCESS.getCode())
@@ -105,11 +116,11 @@ public class ApiResponse<T> {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
-    public static <T> ResponseEntity<ApiResponse<T>> NOT_FOUND(T data) {
+    public static <T> ResponseEntity<ApiResponse<T>> NOT_FOUND(String message) {
         ApiResponse<T> response = ApiResponse.<T>builder()
                 .code(ApiResponseCode.NOT_FOUND.getCode())
-                .message(ApiResponseCode.NOT_FOUND.getMessage())
-                .res(data)
+                .message(message)
+                .res(null)
                 .result(false)
                 .build();
 

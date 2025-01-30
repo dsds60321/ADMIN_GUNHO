@@ -4,36 +4,42 @@
 <body>
 <div layout:fragment="content">
     <!--  header  -->
-    <div th:replace="~{/pages/fragments/header :: breadcrumbs('주식 등록')}"></div>
+    <div th:replace="~{/pages/fragments/header :: breadcrumbs('룰 등록')}"></div>
 
     <!--    body    -->
     <form id="frm" name="frm" action="/rule/add" method="post" onsubmit="return false">
         <div class="wg-box mb-30">
 
-            <fieldset class="symbol">
-                <div class="body-title mb-10">SYMBOL<span class="tf-color-1">*</span></div>
-                <div class="select flex-grow">
-                    <select  id="select-symbol" name="symbol">
-                    </select>
-                </div>
-            </fieldset>
+            <div class="cols-lg">
+                <fieldset class="symbol">
+                    <div class="body-title mb-10">SYMBOL<span class="tf-color-1">*</span></div>
+                    <div class="select flex-grow">
+                        <select id="symbol" name="symbol">
+                            <option value=""></option>
+                            <div th:each="entry : ${STOCKS}">
+                                <option th:value="${entry.symbol}" th:text="${entry.symbol}"></option>
+                            </div>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <fieldset class="average_price">
+                    <div class="body-title mb-10">ID <span class="tf-color-1">*</span></div>
+                    <input class="mb-10" type="text" name="id" id="id" tabindex="0" value="">
+                </fieldset>
+
+                <fieldset class="average_price"></fieldset>
+            </div>
 
 
             <div class="cols-lg">
-                <fieldset class="currency">
-                    <div class="body-title mb-10">통화<span class="tf-color-1">*</span></div>
-                    <select name="currency" id="">
-                        <option value="USD">$ USD</option>
-                        <option value="KRW">₩ KRW</option>
-                    </select>
-                </fieldset>
                 <fieldset class="average_price">
                     <div class="body-title mb-10">평단가<span class="tf-color-1">*</span></div>
-                    <input class="mb-10" type="text" placeholder="Enter title" name="average_price" tabindex="0" value="" aria-required="true" required="">
+                    <input class="mb-10" type="text" name="average_price" id="average_price" tabindex="0" value="" aria-required="true" required="">
                 </fieldset>
                 <fieldset class="quantity">
                     <div class="body-title mb-10">수량<span class="tf-color-1">*</span></div>
-                    <input class="mb-10" type="text" placeholder="Enter title" name="quantity" tabindex="0" value="" aria-required="true" required="">
+                    <input class="mb-10" type="text" name="quantity" tabindex="0" value="" aria-required="true" required="">
                 </fieldset>
             </div>
 
@@ -47,15 +53,6 @@
                     <div class="body-title mb-10">매도 타겟 <span class="tf-color-1">*</span></div>
                     <input class="" type="number" placeholder="Price" name="sell_target_price" tabindex="0" value="" aria-required="true" required="">
                 </fieldset>
-                <fieldset class="rule">
-                    <div class="body-title mb-10">룰 <span class="tf-color-1">*</span></div>
-                    <div th:if="${!RULE.isEmpty()}">
-                        <input class="" type="number" placeholder="Price" name="rule" tabindex="0" value="" aria-required="true" required="">
-                    </div>
-                    <div th:if="${RULE.isEmpty()}">
-                        <input type="text" placeholder="등록되어 있는 규칙이 없습니다." readonly>
-                    </div>
-                </fieldset>
             </div>
         </div>
 
@@ -65,8 +62,8 @@
         </div>
     </form>
     <script src="/js/pages/rule.js"></script>
-    <script>
-        rule.add();
-    </script>
+<script>
+    util.display.selectedSidebar('stock-menu', 2)
+</script>
 </div>
 </body>

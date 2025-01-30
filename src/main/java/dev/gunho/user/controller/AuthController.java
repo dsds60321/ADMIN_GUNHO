@@ -25,6 +25,12 @@ public class AuthController {
         return new ModelAndView("/pages/sign/sign-in","_csrf", authService.getCsrf());
     }
 
+    @PostMapping("/sign-in")
+    @ResponseBody
+    public ResponseEntity<?> signIn(HttpSession session, HttpServletResponse response, @RequestBody final UserDto userDto) {
+        return authService.signIn(session, response, userDto);
+    }
+
     @PostMapping("/verify/email")
     @ResponseBody
     public ResponseEntity<?> send(@RequestBody final EmailVeriftyDto emailVeriftyDto) {
@@ -40,12 +46,6 @@ public class AuthController {
     @ResponseBody
     public ResponseEntity<?> signUp(@RequestBody final UserDto userDto) {
         return authService.signUp(userDto);
-    }
-
-    @PostMapping("/sign-in")
-    @ResponseBody
-    public ResponseEntity<?> signIn(HttpSession session, HttpServletResponse response, @RequestBody final UserDto userDto) {
-        return authService.signIn(session, response, userDto);
     }
 
  }

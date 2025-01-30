@@ -1,0 +1,54 @@
+<div class="pagination-container">
+    <!-- 스크롤 가능한 테이블 컨테이너 -->
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:if="${#lists.size(PAGE.content) eq 0}">
+                    <tr>
+                        <td colspan="99">
+                            조회된 데이터가 없습니다.
+                        </td>
+                    </tr>
+                </th:block>
+                <th:block th:unless="${#lists.size(PAGE.content) eq 0}">
+                    <tr th:each="entry : ${PAGE.content}">
+                        <td th:text="${entry.id}"></td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+    <div class="divider"></div>
+    <!-- 페이징 버튼 -->
+    <div class="flex items-center justify-between flex-wrap gap10 mt-5">
+        <div class="text-tiny">Showing <span th:text="${PAGE.size}"></span> entries of <span th:text="${PAGE.totalElements}"></span></div>
+        <ul class="wg-pagination">
+            <li th:if="${PAGE.number == 0}" class="disabled">
+                <a href="#"><i class="icon-chevron-left"></i></a>
+            </li>
+            <li th:if="${PAGE.number > 0}">
+                <a href="#" th:onclick="'search.submit(this,' + ${PAGE.number} - 1')'">
+                    <i class="icon-chevron-left"></i>
+                </a>
+            </li>
+
+            <li th:each="i : ${#numbers.sequence(0, PAGE.totalPages - 1)}"
+                th:classappend="${PAGE.number == i} ? 'active'">
+                <a href="#" th:text="${PAGE.number + 1}"></a>
+            </li>
+
+            <li th:if="${PAGE.number + 1 < PAGE.totalPages}">
+                <a th:href="@{'/stock/paging?page=' + (${PAGE.number} + 1) + '&size=' + ${PAGE.size}
+                   + '&condition=' + ${param.condition}}"><i class="icon-chevron-right"></i></a>
+            </li>
+            <li th:if="${PAGE.number + 1 >= PAGE.totalPages}" class="disabled">
+                <a href="#"><i class="icon-chevron-right"></i></a>
+            </li>
+        </ul>
+    </div>
+</div>
