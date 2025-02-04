@@ -88,10 +88,20 @@ public class StockService {
     }
 
     @Transactional
-    public ModelAndView getPagingByCondition(ModelAndView mv, PageRequest pageRequest, String condition) {
-        Page<Stock> stockPage = stockRepository.findByOrderByRegDate(pageRequest);
-        PagingDTO<StockDTO> pagingDTO = stockMapper.toPagingDTO(stockPage);
+    public ModelAndView getPagingByCondition(ModelAndView mv, PageRequest pageRequest, long userIdx, String condition) {
+        Page<Stock> stockPage = stockRepository.findByUserIdxOrderByRegDate(userIdx, pageRequest);
+        PagingDTO<StockPagePayload> pagingDTO = stockMapper.toPagingDTO(stockPage);
+
+        List<StockPagePayload> updatedContent = pagingDTO.getContent().stream().map(stock -> {
+            String price = redisService.get(String.format(StockConstants.STOCK_DAILY_PRICE_SYMBOL, stock.symbol()));
+            return stock.withMarketPrice(Double.parseDouble(price));
+        }).toList(); // 변경된 데이터를 리스트로 수집
+
+        // 변환한 데이터를 PagingDTO에 반영
+        pagingDTO.setContent(updatedContent);
+
         mv.addObject("PAGE", pagingDTO);
         return mv;
     }
+
 }

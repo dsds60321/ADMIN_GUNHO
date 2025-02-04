@@ -140,6 +140,40 @@ const util = {
                 sidenav.querySelectorAll('ul > li')[subSideNo - 1].classList.add('active');
             }
         }
+    },
+
+
+    modal : {
+        open : async function (url, size = 'medium') {
+            const modalContainer = document.getElementById('modal-container');
+            const modalBody = document.getElementById('modal-body');
+
+            modalContainer.classList.remove('small', 'medium', 'large');
+            modalContainer.classList.add(size);
+
+            const { data } = await Get(url);
+            if (data) {
+                modalBody.innerHTML = data;
+                modalContainer.classList.remove('hidden');
+                modalContainer.classList.add('visible');
+
+                modalContainer.addEventListener('click', (e) => {
+                    if (e.target === modalContainer) {
+                        this.close();
+                    }
+                })
+            }
+        },
+        close : function () {
+            const modalContainer = document.getElementById('modal-container');
+            const modalBody = document.getElementById('modal-body');
+
+            modalContainer.classList.remove('visible');
+            setTimeout(() => {
+                modalContainer.classList.add('hidden');
+                modalBody.innerHTML = '';
+            },300);
+        }
     }
 
 }

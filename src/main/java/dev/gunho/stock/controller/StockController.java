@@ -45,11 +45,12 @@ public class StockController {
     public ModelAndView paging(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
-            @RequestParam(name = "condition", defaultValue = "new") String condition
+            @RequestParam(name = "condition", defaultValue = "new") String condition,
+            @AuthenticationPrincipal UserDetail userDetail
     ) {
         // 페이지 요청 객체를 생성하고, 서비스 호출
         PageRequest pageRequest = PageRequest.of(page, size);
-        return stockService.getPagingByCondition(new ModelAndView("/pages/stock/list"), pageRequest, condition);
+        return stockService.getPagingByCondition(new ModelAndView("/pages/stock/list"), pageRequest, userDetail.getId(), condition);
     }
 
 
@@ -58,7 +59,7 @@ public class StockController {
      * 주식 등록
      */
     @GetMapping("/add")
-    public ModelAndView addRuleView(@AuthenticationPrincipal UserDetail userDetail) {
+    public ModelAndView addStockView(@AuthenticationPrincipal UserDetail userDetail) {
         return stockService.addView(new ModelAndView("/pages/stock/add"), userDetail.getId());
     }
 
@@ -67,7 +68,7 @@ public class StockController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<?> addRule(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final StockDTO stockDTO) {
+    public ResponseEntity<?> addStock(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final StockDTO stockDTO) {
         return stockService.addStock(userDetail.getId(), stockDTO);
     }
 }

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>친구 초대 - 주식 공유 플랫폼</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border-spacing: 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #3b82f6;
+            color: white;
+            text-align: center;
+            padding: 20px 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .body {
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .body p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+
+        .body strong {
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .invite-btn {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .invite-btn:hover {
+            background-color: #2563eb;
+        }
+
+        /* 푸터 디자인 */
+        .footer {
+            background-color: #f1f5f9;
+            text-align: center;
+            padding: 15px 10px;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td class="header">
+            함께 주식 정보로 수익을 쌓아가세요!
+        </td>
+    </tr>
+
+    <tr>
+        <td class="body">
+            <p><strong>{id}</strong>님이 당신을 주식 공유 사이트로 초대했습니다!</p>
+            <p>
+                실시간으로 업데이트되는 주식 정보와 다양한 투자 전략을 공유하며<br>
+                주식 커뮤니티에서 더 많은 가치를 발견해보세요.
+            </p>
+            <p>
+                새로운 추천 종목, 투자 팁, 그리고 주식 거래 아이디어를 함께 나누며<br>
+                지식을 확장하고 더 높은 수익을 달성할 수 있습니다.
+            </p>
+            <a href="{link}" class="invite-btn">
+                지금 가입하고 초대 혜택을 받으세요
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="footer">
+            © 2025 [GUNHO.DEV]. All rights reserved.<br>
+            <a href="https://localhost:8080" target="_blank">웹사이트 방문</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

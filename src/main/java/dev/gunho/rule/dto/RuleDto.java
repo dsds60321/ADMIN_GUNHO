@@ -1,12 +1,12 @@
 package dev.gunho.rule.dto;
 
+import java.math.BigDecimal;
+
 public record RuleDto(
+        String id,
         String symbol,
-        String currency,
-        double average_price,
-        double buy_target_price,
-        double sell_target_price,
-        String quantity,
-        String rule
-) {
+        int buyPrice,
+        BigDecimal buyPercentage,
+        int sellPrice,
+        BigDecimal sellPercentage) {
 }

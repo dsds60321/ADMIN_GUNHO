@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Description("Rule 테이블")
 @Entity
 @Getter
@@ -23,15 +25,16 @@ public class Rule extends BaseTimeEntity {
 
     private String id;
 
+    private int buyPrice;
     // 증가
-    private Double buyPrice; // 매도 발생 금액 기준
-
-    private Double buyPercentage; // 매도 발생 퍼센트 기준
+    @Column(precision = 3, scale = 2)
+    private BigDecimal buyPercentage;
 
     // 매도
-    private Double sellPrice; // 매도 발생 금액 기준
+    @Column(precision = 3, scale = 2)
+    private BigDecimal sellPercentage;
 
-    private Double sellPercentage; // 매도 발생 퍼센트 기준
+    private int sellPrice;
 
     // Stock와의 N:1 관계 추가
     @OneToOne(fetch = FetchType.LAZY)

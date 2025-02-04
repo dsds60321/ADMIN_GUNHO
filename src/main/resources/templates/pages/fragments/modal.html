@@ -1,0 +1,11 @@
+<div th:fragment="modal" th:remove="tag">
+    <div id="modal-container" class="modal-container hidden">
+        <div id="modal-content" class="modal-content-wrapper">
+            <!-- 닫기 버튼 -->
+            <button type="button" onclick="util.modal.close()" class="btn-close" id="close-modal-btn" aria-label="Close"></button>
+            <!-- 동적으로 로드된 타임리프 콘텐츠 -->
+            <div class="modal-body" id="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

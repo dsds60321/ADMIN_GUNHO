@@ -3,6 +3,7 @@ package dev.gunho.stock.mapper;
 import dev.gunho.rule.entity.Rule;
 import dev.gunho.stock.dto.StockDTO;
 import dev.gunho.stock.dto.StockDataDTO;
+import dev.gunho.stock.dto.StockPagePayload;
 import dev.gunho.stock.entity.Stock;
 import dev.gunho.user.entity.User;
 import java.util.ArrayList;
@@ -12,14 +13,14 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-01-31T00:24:07+0900",
+    date = "2025-02-03T23:06:22+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
 public class StockMapperImpl implements StockMapper {
 
     @Override
-    public StockDTO toDTO(Stock stock) {
+    public StockPagePayload toDTO(Stock stock) {
         if ( stock == null ) {
             return null;
         }
@@ -38,11 +39,12 @@ public class StockMapperImpl implements StockMapper {
         sellPrice = stock.getSellPrice();
         quantity = stock.getQuantity();
 
-        String rule = null;
+        Rule rule = null;
+        Double marketPrice = null;
 
-        StockDTO stockDTO = new StockDTO( symbol, currency, averagePrice, buyPrice, sellPrice, quantity, rule );
+        StockPagePayload stockPagePayload = new StockPagePayload( symbol, currency, averagePrice, buyPrice, sellPrice, marketPrice, quantity, rule );
 
-        return stockDTO;
+        return stockPagePayload;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class StockMapperImpl implements StockMapper {
 
         List<StockDTO> list = new ArrayList<StockDTO>( stock.size() );
         for ( Stock stock1 : stock ) {
-            list.add( toDTO( stock1 ) );
+            list.add( stockToStockDTO( stock1 ) );
         }
 
         return list;
@@ -134,5 +136,29 @@ public class StockMapperImpl implements StockMapper {
         Stock stock = new Stock( idx, symbol, quantity, currency, averagePrice, buyPrice, sellPrice, user1, rule1 );
 
         return stock;
+    }
+
+    protected StockDTO stockToStockDTO(Stock stock) {
+        if ( stock == null ) {
+            return null;
+        }
+
+        String symbol = null;
+        String currency = null;
+        Double averagePrice = null;
+        Double buyPrice = null;
+        Double sellPrice = null;
+        int quantity = 0;
+
+        symbol = stock.getSymbol();
+        currency = stock.getCurrency();
+        averagePrice = stock.getAveragePrice();
+        buyPrice = stock.getBuyPrice();
+        sellPrice = stock.getSellPrice();
+        quantity = stock.getQuantity();
+
+        StockDTO stockDTO = new StockDTO( symbol, currency, averagePrice, buyPrice, sellPrice, quantity );
+
+        return stockDTO;
     }
 }

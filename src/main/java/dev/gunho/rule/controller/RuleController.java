@@ -1,15 +1,16 @@
 package dev.gunho.rule.controller;
 
 import dev.gunho.global.dto.UserDetail;
+import dev.gunho.rule.dto.RuleDto;
 import dev.gunho.rule.service.RuleService;
+import dev.gunho.stock.dto.StockDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
@@ -39,5 +40,14 @@ public class RuleController {
     @GetMapping("/add")
     public ModelAndView addView(@AuthenticationPrincipal UserDetail userDetail) {
         return ruleService.addView(new ModelAndView("/pages/rule/add"), userDetail.getId());
+    }
+
+    /**
+     * 주식 등록
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public ResponseEntity<?> addRule(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final RuleDto ruleDto) {
+        return ruleService.add(userDetail.getId(), ruleDto);
     }
 }

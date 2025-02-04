@@ -1,0 +1,50 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{pages/include/layout}">
+<body>
+<div layout:fragment="content">
+
+    <div class="main-content-wrap">
+        <div th:replace="~{/pages/fragments/header :: breadcrumbs('친구 관리')}"></div>
+
+    <!-- product-list -->
+        <div class="wg-box">
+        <div class="flex items-center justify-between gap10 flex-wrap">
+            <div class="wg-filter flex-grow">
+                <div class="show">
+                    <div class="text-tiny">Showing</div>
+                    <div class="select">
+                        <select name="size" id="page-size">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+                    <div class="text-tiny">entries</div>
+                </div>
+
+                <form name="search-form" id="search-form" action="/user/friends/paging" method="get" onsubmit="return false" class="form-search">
+                    <fieldset class="name">
+                        <input type="text" placeholder="Search here..." class="" name="name" tabindex="2" value="">
+                    </fieldset>
+                    <div class="button-submit">
+                        <button class="" id="search-btn" type="submit"><i class="icon-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <a class="tf-button style-1 w208 cursor-pointer" onclick="util.modal.open('/user/friends/invite')"><i class="icon-plus"></i>친구 초대</a>
+        </div>
+
+        <!-- 폼 -->
+        <div th:replace="~{/pages/fragments/paging :: paging('paging')}"></div>
+        <div th:replace="~{/pages/fragments/modal :: modal}"></div>
+
+    </div>
+    <!-- /product-list -->
+    </div>
+
+<script>
+    util.display.selectedSidebar('user-menu', 1)
+</script>
+</div>
+</body>

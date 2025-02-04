@@ -6,6 +6,5 @@ public record StockDTO(
     Double averagePrice,
     Double buyPrice,
     Double sellPrice,
-    int quantity,
-    String rule) {
+    int quantity) {
 }

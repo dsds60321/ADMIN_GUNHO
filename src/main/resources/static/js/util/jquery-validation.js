@@ -1,4 +1,21 @@
 const jqueryValidOptions = {
+    commonOption :{
+        errorElement: "span", // 오류 메시지 요소 (기본: <label>)
+        errorClass: "error-message", // CSS 클래스
+        highlight: function (element) {
+            $(element).addClass("input-error");
+        },
+        unhighlight: function (element) {
+            $(element).removeClass("input-error");
+        },
+        errorPlacement: function (error, element) {
+            if (element.closest("fieldset").length) {
+                element.closest("fieldset").append(error);
+            } else {
+                error.insertAfter(element); // 기본 위치
+            }
+        }
+    },
     // AUTH
     sign : {
         in: function(submitHandler) {
@@ -192,5 +209,32 @@ const jqueryValidOptions = {
             };
         },
 
+    },
+
+
+    rule : {
+        add: function(submitHandler) {
+            return {
+                ...jqueryValidOptions.commonOption,
+                rules: {
+                    id: {
+                        required: true, // 필수 입력값
+                    },
+                    buyPrice: {
+                        required: true, // 필수 입력값
+                    },
+                    buyPercentage: {
+                        required: true, // 필수 입력값
+                    },
+                    sellPrice: {
+                        required: true, // 필수 입력값
+                    },
+                    sellPercentage: {
+                        required: true, // 필수 입력값
+                    }
+                },
+                submitHandler: submitHandler // 외부에서 주입받은 함수 사용
+            };
+        },
     }
 }

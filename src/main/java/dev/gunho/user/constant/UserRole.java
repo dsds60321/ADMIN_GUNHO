@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum UserRole {
 
-    DEFAULT("DEFAULT");
+    HOST("HOST"),
+    GUEST("GUEST");
 
     private final String value;
 

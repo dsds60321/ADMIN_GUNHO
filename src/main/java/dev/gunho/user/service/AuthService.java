@@ -82,7 +82,7 @@ public class AuthService {
         }
 
 
-        User user = UserMapper.INSTANCE.toEntity(userDto.setSignUp(passwordEncoder.encode(userDto.password()), UserRole.DEFAULT));
+        User user = UserMapper.INSTANCE.toEntity(userDto.setSignUp(passwordEncoder.encode(userDto.password()), UserRole.HOST));
         User resEntity = userRepository.save(user);
 
         return resEntity != null ? ApiResponse.SUCCESS("계정 등록에 성공했습니다.") : ApiResponse.SERVER_ERROR();

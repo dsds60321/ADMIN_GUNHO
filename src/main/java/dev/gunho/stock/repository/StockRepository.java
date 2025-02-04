@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
-    Page<Stock> findByOrderByRegDate(Pageable pageable);
+    Page<Stock> findByUserIdxOrderByRegDate(long idx, Pageable pageable);
 
     List<Stock> findAllByUserIdx(Long userIdx);
+
+    Optional<Stock> findByUserIdxAndSymbol(Long userIdx, String symbol);
 }

@@ -24,9 +24,9 @@ public class QRule extends EntityPathBase<Rule> {
 
     public final dev.gunho.global.entity.QBaseTimeEntity _super = new dev.gunho.global.entity.QBaseTimeEntity(this);
 
-    public final NumberPath<Double> buyPercentage = createNumber("buyPercentage", Double.class);
+    public final NumberPath<java.math.BigDecimal> buyPercentage = createNumber("buyPercentage", java.math.BigDecimal.class);
 
-    public final NumberPath<Double> buyPrice = createNumber("buyPrice", Double.class);
+    public final NumberPath<Integer> buyPrice = createNumber("buyPrice", Integer.class);
 
     public final StringPath id = createString("id");
 
@@ -35,9 +35,9 @@ public class QRule extends EntityPathBase<Rule> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
-    public final NumberPath<Double> sellPercentage = createNumber("sellPercentage", Double.class);
+    public final NumberPath<java.math.BigDecimal> sellPercentage = createNumber("sellPercentage", java.math.BigDecimal.class);
 
-    public final NumberPath<Double> sellPrice = createNumber("sellPrice", Double.class);
+    public final NumberPath<Integer> sellPrice = createNumber("sellPrice", Integer.class);
 
     public final dev.gunho.stock.entity.QStock stock;
 
