@@ -1,15 +1,18 @@
 package dev.gunho.stock.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.gunho.global.dto.ApiResponse;
 import dev.gunho.global.dto.ApiResponseCode;
 import dev.gunho.global.dto.PagingDTO;
+import dev.gunho.global.dto.UserDetail;
+import dev.gunho.global.entity.Template;
 import dev.gunho.global.exception.GlobalException;
+import dev.gunho.global.service.KafkaProducerService;
 import dev.gunho.global.service.RedisService;
-import dev.gunho.global.service.WebClientService;
 import dev.gunho.rule.entity.Rule;
 import dev.gunho.rule.repository.RuleRepository;
 import dev.gunho.stock.constant.StockConstants;
+import dev.gunho.stock.dto.NotiDTO;
 import dev.gunho.stock.dto.StockDTO;
 import dev.gunho.stock.dto.StockPagePayload;
 import dev.gunho.stock.entity.Stock;
@@ -17,14 +20,19 @@ import dev.gunho.stock.entity.StockSymbol;
 import dev.gunho.stock.mapper.StockMapper;
 import dev.gunho.stock.repository.StockRepository;
 import dev.gunho.stock.repository.StockSymbolRepository;
+import dev.gunho.user.dto.EmailPayload;
+import dev.gunho.user.entity.QInvite;
+import dev.gunho.user.entity.QUser;
 import dev.gunho.user.entity.User;
+import dev.gunho.user.mapper.UserMapper;
+import dev.gunho.user.repository.InviteRepository;
+import dev.gunho.user.repository.TemplateRepository;
 import dev.gunho.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +47,8 @@ import java.util.Map;
 public class StockService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final TemplateRepository templateRepository;
     @Value("${api.alpha-vantage.host}")
     private String alphaVantageApi;
 
@@ -49,7 +59,10 @@ public class StockService {
     private final StockMapper stockMapper = StockMapper.INSTANCE;
     private final StockRepository stockRepository;
     private final RuleRepository ruleRepository;
+    private final InviteRepository inviteRepository;
 
+    private final JPAQueryFactory queryFactory;
+    private final KafkaProducerService kafkaProducerService;
     private final RedisService redisService;
 
 
@@ -104,4 +117,40 @@ public class StockService {
         return mv;
     }
 
+    public ResponseEntity<?> sendNotiWithFriends(UserDetail userDetail, NotiDTO notiDTO) {
+        User user = userRepository.findById(userDetail.getId())
+                .orElseThrow(() -> new GlobalException(ApiResponseCode.NOT_FOUND));
+
+        QInvite invite = QInvite.invite; // QueryDSL 메타 모델 사용
+        QUser qUser = QUser.user;        // QueryDSL 메타 모델 사용
+
+        List<User> receivedInvites = queryFactory
+                .select(qUser) // User 엔티티에서 정보를 가져옵니다.
+                .from(invite)
+                .leftJoin(invite.invitee, qUser) // Invitee와 Join
+                .where(invite.inviter.idx.eq(user.getIdx())) // inviter_id 조건
+                .fetch();// 결과 가져오기
+
+        if (receivedInvites.isEmpty()) {
+            return ApiResponse.BAD_REQUEST("초대한 친구가 없습니다.");
+        }
+
+
+        List<String> toUsers = receivedInvites.stream().map(User::getEmail).toList();
+
+        Template template = templateRepository.getById("STOCK_NOTI");
+        String contents = template.getContent().replace("{id}", user.getUserId())
+                .replace("{symbol}", notiDTO.symbol())
+                .replace("{type}", notiDTO.isBuy() ? "매수" : "매도");
+
+        EmailPayload payload = EmailPayload.builder()
+                .to(toUsers)
+                .subject(template.getSubject())
+                .from(template.getFrom())
+                .contents(contents)
+                .build();
+
+        kafkaProducerService.sendMessage("email-topic", payload);
+        return ApiResponse.SUCCESS();
+    }
 }

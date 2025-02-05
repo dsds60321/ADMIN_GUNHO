@@ -61,6 +61,15 @@ public class User extends BaseTimeEntity {
     @Builder.Default
     private List<Rule> rules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "inviter", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Invite> sentInvites = new ArrayList<>(); // 내가 보낸 초대
+
+    @OneToMany(mappedBy = "invitee", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Invite> receivedInvites = new ArrayList<>(); // 내가 받은 초대
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -72,4 +81,5 @@ public class User extends BaseTimeEntity {
     public int hashCode() {
         return Objects.hashCode(idx);
     }
+
 }

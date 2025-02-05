@@ -19,6 +19,8 @@ const util = {
 
             }
         }
+
+        util.display.dropdown.init();
     },
 
     form : {
@@ -138,6 +140,47 @@ const util = {
 
             if (subSideNo) {
                 sidenav.querySelectorAll('ul > li')[subSideNo - 1].classList.add('active');
+            }
+        },
+
+        dropdown : {
+            init : function () {
+                document.addEventListener("click", function (event) {
+                    const isDropdown = event.target.closest(".dropdown-container");
+                    const isMenu = event.target.closest(".dropdown-menu");
+                    if (!isDropdown && !isMenu) {
+                        document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+                            menu.classList.remove("show");
+                            menu.removeAttribute("style");
+                        });
+                    }
+                });
+            },
+            toggleDropdown : function (trigger) {
+                const dropdownMenu = trigger.nextElementSibling; // 드롭다운 메뉴 선택
+                const isShown = dropdownMenu.classList.contains("show");
+
+                // 기존에 열려 있는 모든 드롭다운 닫기
+                document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+                    menu.classList.remove("show");
+                    menu.removeAttribute("style"); // 기존 스타일 제거
+                });
+
+                if (!isShown) {
+                    // 버튼 위치 가져오기
+                    const rect = trigger.getBoundingClientRect(); // 화면에서의 버튼 위치 가져오기
+                    const top = rect.bottom + window.scrollY; // 버튼 하단의 Y 축 절대 위치
+                    const left = rect.left + window.scrollX; // 버튼의 왼쪽 X 축 절대 위치
+
+                    // 드롭다운 메뉴 스타일 설정
+                    dropdownMenu.style.position = "absolute"; // 절대 위치
+                    dropdownMenu.style.top = `${top}px`; // 버튼 하단에 위치
+                    dropdownMenu.style.left = `${left}px`; // 버튼의 왼쪽과 일치
+                    dropdownMenu.style.minWidth = `${rect.width}px`; // 버튼 폭과 동일
+
+                    // 드롭다운 메뉴 활성화
+                    dropdownMenu.classList.add("show");
+                }
             }
         }
     },

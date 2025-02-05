@@ -59,6 +59,7 @@
                     </div>
                     <form class="form-login flex flex-column gap22 w-full" id="signUpFrm" name="signUpFrm" method="post" action="/auth/sign-up" onsubmit="return false">
                         <input type="hidden" name="_csrf" th:value="${_csrf}">
+                        <input type="hidden" name="_token" th:value="${token}">
                         <div>
                             <div class="body-title mb-10 text-white">이름 </div>
                             <div class="cols gap10">

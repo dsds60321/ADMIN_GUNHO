@@ -20,6 +20,18 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @GetMapping("/sign-up")
+    public ModelAndView signUp(@RequestParam(name = "token", required = false) String token) {
+        return new ModelAndView("/pages/sign/sign-up","_csrf", authService.getCsrf())
+                .addObject("token", token);
+    }
+
+    @PostMapping("/sign-up")
+    @ResponseBody
+    public ResponseEntity<?> signUp(@RequestBody final UserDto userDto) {
+        return authService.signUp(userDto);
+    }
+
     @GetMapping("/sign-in")
     public ModelAndView signIn() {
         return new ModelAndView("/pages/sign/sign-in","_csrf", authService.getCsrf());
@@ -35,17 +47,6 @@ public class AuthController {
     @ResponseBody
     public ResponseEntity<?> send(@RequestBody final EmailVeriftyDto emailVeriftyDto) {
         return authService.verifyEmail(emailVeriftyDto);
-    }
-
-    @GetMapping("/sign-up")
-    public ModelAndView signUp() {
-        return new ModelAndView("/pages/sign/sign-up","_csrf", authService.getCsrf());
-    }
-
-    @PostMapping("/sign-up")
-    @ResponseBody
-    public ResponseEntity<?> signUp(@RequestBody final UserDto userDto) {
-        return authService.signUp(userDto);
     }
 
  }

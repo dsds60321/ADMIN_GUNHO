@@ -9,6 +9,7 @@ public record UserDto(
         String nick,
         String _csrf,
         String emailAuth,
+        String _token,
         UserRole role
 ) {
     // 유효성 검증 메소드 추가 가능
@@ -23,7 +24,7 @@ public record UserDto(
     }
 
     public UserDto setSignUp(String encPassword, UserRole role) {
-        return new UserDto(userId, encPassword, email, nick, "", "", role);
+        return new UserDto(userId, encPassword, email, nick, "", "", _token, role);
     }
 }
 

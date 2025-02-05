@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-02-03T00:01:47+0900",
+    date = "2025-02-06T00:37:32+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
@@ -51,9 +51,10 @@ public class UserMapperImpl implements UserMapper {
         role = entity.getRole();
 
         String csrf = null;
+        String token = null;
         String emailAuth = null;
 
-        UserDto userDto = new UserDto( userId, password, email, nick, csrf, emailAuth, role );
+        UserDto userDto = new UserDto( userId, password, email, nick, csrf, emailAuth, token, role );
 
         return userDto;
     }

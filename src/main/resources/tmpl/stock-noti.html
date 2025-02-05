@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Alert</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+<div style="max-width: 600px; margin: 20px auto; border: 1px solid #ddd; border-radius: 8px; background-color: #ffffff; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="font-size: 24px; color: #333;">📈 주식 알림</h1>
+    </div>
+    <div style="font-size: 16px; color: #555; line-height: 1.6;">
+        안녕하세요, <br><br>
+        <strong style="color: #000;">{id}</strong>님이 <strong style="color: #000;">{symbol}</strong> 주식에 대해
+        <strong style="color: #000;">{type}</strong> 알림을 보냈습니다. <br><br>
+        더 자세한 정보를 확인하시려면 아래 버튼을 눌러 주세요.
+        <br><br>
+        <div style="display: flex; justify-content: center;">
+            <a href="%s" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 5px; text-align: center;">자세히 보기</a>
+        </div>
+    </div>
+    <div style="margin-top: 20px; font-size: 14px; color: #777; text-align: center;">
+        이 알림은 투자 목적의 참고용 정보입니다.<br>
+        <strong>주식 알림 서비스</strong>
+    </div>
+</div>
+</body>
+</html>

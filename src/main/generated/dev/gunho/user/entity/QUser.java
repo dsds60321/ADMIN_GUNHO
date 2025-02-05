@@ -34,12 +34,16 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
+    public final ListPath<Invite, QInvite> receivedInvites = this.<Invite, QInvite>createList("receivedInvites", Invite.class, QInvite.class, PathInits.DIRECT2);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
     public final EnumPath<dev.gunho.user.constant.UserRole> role = createEnum("role", dev.gunho.user.constant.UserRole.class);
 
     public final ListPath<dev.gunho.rule.entity.Rule, dev.gunho.rule.entity.QRule> rules = this.<dev.gunho.rule.entity.Rule, dev.gunho.rule.entity.QRule>createList("rules", dev.gunho.rule.entity.Rule.class, dev.gunho.rule.entity.QRule.class, PathInits.DIRECT2);
+
+    public final ListPath<Invite, QInvite> sentInvites = this.<Invite, QInvite>createList("sentInvites", Invite.class, QInvite.class, PathInits.DIRECT2);
 
     public final StringPath status = createString("status");
 

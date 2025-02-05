@@ -1,5 +1,6 @@
 package dev.gunho.user.mapper;
 
+import dev.gunho.global.dto.UserDetail;
 import dev.gunho.user.dto.UserPayload;
 import dev.gunho.user.entity.User;
 import dev.gunho.user.dto.UserDto;
@@ -23,10 +24,10 @@ public interface UserMapper {
     })
     User toEntity(UserDto dto);
 
-    @Mapping(target = "_csrf", ignore = true)        // _csrf 필드 무시 (필요 시 수정 가능)
-    @Mapping(target = "emailAuth", ignore = true)    // emailAuth 필드 무시 (필요 시 수정 가능)
+    @Mapping(target = "_csrf", ignore = true)
+    @Mapping(target = "_token", ignore = true)
+    @Mapping(target = "emailAuth", ignore = true)
     UserDto toDto(User entity);
 
     UserPayload toPayload(User entity);
-
 }

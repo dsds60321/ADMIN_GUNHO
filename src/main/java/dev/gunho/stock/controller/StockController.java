@@ -2,20 +2,17 @@ package dev.gunho.stock.controller;
 
 import dev.gunho.global.dto.UserDetail;
 import dev.gunho.rule.service.RuleService;
+import dev.gunho.stock.dto.NotiDTO;
 import dev.gunho.stock.dto.StockDTO;
-import dev.gunho.stock.dto.StockPagePayload;
 import dev.gunho.stock.service.StockService;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Description("주식")
 @Controller
@@ -70,5 +67,10 @@ public class StockController {
     @ResponseBody
     public ResponseEntity<?> addStock(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final StockDTO stockDTO) {
         return stockService.addStock(userDetail.getId(), stockDTO);
+    }
+
+    @PostMapping("/noti")
+    public ResponseEntity<?> noti(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final NotiDTO notiDTO) {
+        return stockService.sendNotiWithFriends(userDetail, notiDTO);
     }
 }

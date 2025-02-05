@@ -236,5 +236,20 @@ const jqueryValidOptions = {
                 submitHandler: submitHandler // 외부에서 주입받은 함수 사용
             };
         },
+    },
+
+    user : {
+        invite : function(submitHandler) {
+            return {
+                ...jqueryValidOptions.commonOption,
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                },
+                submitHandler: submitHandler // 외부에서 주입받은 함수 사용
+            };
+        }
     }
 }

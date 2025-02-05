@@ -383,3 +383,44 @@ h1 {
 .modal-content-wrapper.large {
     max-width: 900px; /* 큰 사이즈 */
 }
+
+/* dropdwon */
+.dropdown-container {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute; /* 부모 요소와 독립적으로 동작 */
+    top: 0; /* 동적 위치 지정 */
+    left: 0;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 9999; /* 항상 화면 위에 표시 */
+    min-width: 120px;
+    border-radius: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* 드롭다운 아이템 */
+.dropdown-item {
+    padding: 10px 15px;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+/* Hover 시 색상 변경 */
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* 드롭다운 활성화 시 */
+.dropdown-menu.show {
+    display: flex;
+}

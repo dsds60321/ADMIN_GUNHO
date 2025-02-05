@@ -1,6 +1,7 @@
 package dev.gunho.user.controller;
 
 import dev.gunho.global.dto.UserDetail;
+import dev.gunho.user.dto.InviteDto;
 import dev.gunho.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -46,8 +47,8 @@ public class UserController {
     }
 
     @PostMapping("/friends/invite")
-    public @ResponseBody ResponseEntity<?> inviteFriend(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final String email) {
-        return userService.invite(userDetail, email);
+    public @ResponseBody ResponseEntity<?> inviteFriend(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final InviteDto inviteDto) {
+        return userService.invite(userDetail, inviteDto);
     }
 
     @GetMapping("/chat/form")
