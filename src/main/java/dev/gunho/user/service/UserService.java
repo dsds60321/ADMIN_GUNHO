@@ -5,29 +5,26 @@ import dev.gunho.global.dto.ApiResponseCode;
 import dev.gunho.global.dto.UserDetail;
 import dev.gunho.global.entity.Template;
 import dev.gunho.global.exception.GlobalException;
-import dev.gunho.global.provider.JwtProvider;
 import dev.gunho.global.service.KafkaProducerService;
 import dev.gunho.global.util.IdUtil;
 import dev.gunho.user.dto.EmailPayload;
 import dev.gunho.user.dto.InviteDto;
 import dev.gunho.user.dto.UserPayload;
 import dev.gunho.user.entity.Invite;
-import dev.gunho.user.entity.QInvite;
 import dev.gunho.user.entity.User;
+import dev.gunho.user.mapper.InviteMapper;
 import dev.gunho.user.mapper.UserMapper;
 import dev.gunho.user.repository.InviteRepository;
 import dev.gunho.user.repository.TemplateRepository;
 import dev.gunho.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -92,5 +89,17 @@ public class UserService {
 
 
         return ApiResponse.SUCCESS();
+    }
+
+    public ResponseEntity<?> getFriends(UserDetail userDetail) {
+
+        User user = userRepository.findById(userDetail.getId())
+                .orElseThrow(() -> new GlobalException(ApiResponseCode.NOT_FOUND));
+
+        List<InviteDto> friends = user.getSentInvites()
+                .stream().map(InviteMapper.INSTANCE::toDto)
+                .toList();
+
+        return ApiResponse.SUCCESS(friends);
     }
 }

@@ -1,0 +1,18 @@
+<form name="frm" id="frm" action="/user/chat/create" method="POST"  class="d-flex flex-column gap-3" onsubmit="return false;">
+    <label for="title" class="form-label">채팅방 이름<span class="tf-color-1">*</span></label>
+    <input type="text" id="title" name="title" class="form-control">
+
+    <label class="form-label">채팅방 만들기</label>
+    <fieldset class="friends">
+        <div class="body-title mb-10">친구목록<span class="tf-color-1">*</span></div>
+        <div class="select flex-grow">
+            <select id="select-frineds" name="friendIdx">
+            </select>
+        </div>
+    </fieldset>
+
+    <!-- 버튼 섹션 -->
+    <div class="text-center mt-3">
+        <button class="float-end tf-button style-4" onclick="user.chat.invite()" type="submit">초대하기</button>
+    </div>
+</form>

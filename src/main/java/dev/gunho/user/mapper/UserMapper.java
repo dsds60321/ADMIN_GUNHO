@@ -1,9 +1,8 @@
 package dev.gunho.user.mapper;
 
-import dev.gunho.global.dto.UserDetail;
+import dev.gunho.user.dto.UserDto;
 import dev.gunho.user.dto.UserPayload;
 import dev.gunho.user.entity.User;
-import dev.gunho.user.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

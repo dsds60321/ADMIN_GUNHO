@@ -1,0 +1,22 @@
+<div class="chat-container">
+    <!-- 채팅 메시지 표시 영역 -->
+    <div class="chat-messages" id="chatMessages">
+    </div>
+
+    <!-- 메시지 입력 영역 -->
+    <form name="frm" id="frm" action="/user/chat/req" method="POST" onsubmit="return false;" class="chat-input-form">
+        <input type="hidden" name="roomIdx" th:value="${idx}">
+        <input type="hidden" name="userId" th:value="${userId}">
+        <input type="hidden" name="userIdx" th:value="${userIdx}">
+        <div class="input-container">
+            <textarea
+                    class="message-input"
+                    placeholder="메시지를 입력하세요..."
+                    rows="1"
+                    name="message"></textarea>
+            <button type="button" id="message-btn" class="send-button" onclick="user.chat.send()">
+                전송
+            </button>
+        </div>
+    </form>
+</div>

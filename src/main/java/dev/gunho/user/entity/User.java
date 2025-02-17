@@ -1,6 +1,7 @@
 package dev.gunho.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.gunho.chat.entity.ChatRoom;
 import dev.gunho.global.entity.BaseTimeEntity;
 import dev.gunho.rule.entity.Rule;
 import dev.gunho.stock.entity.Stock;
@@ -53,21 +54,25 @@ public class User extends BaseTimeEntity {
     @JsonIgnore
     private Auth auth;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Stock> stocks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Rule> rules = new ArrayList<>();
 
-    @OneToMany(mappedBy = "inviter", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "inviter", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Invite> sentInvites = new ArrayList<>(); // 내가 보낸 초대
 
-    @OneToMany(mappedBy = "invitee", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "invitee", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Invite> receivedInvites = new ArrayList<>(); // 내가 받은 초대
+
+    @ManyToMany(mappedBy = "users") // ChatRoom이 관계의 주인
+    private List<ChatRoom> chatRooms = new ArrayList<>();
+
 
 
     @Override

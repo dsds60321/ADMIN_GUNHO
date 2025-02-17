@@ -34,27 +34,22 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-
-
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> {
-                            request.requestMatchers(
-                                    "/css/**",       // CSS 파일
-                                    "/font/**",       // CSS 파일
-                                    "/icon/**",       // CSS 파일
-                                    "/images/**",       // CSS 파일
-                                    "/js/**",       // CSS 파일
-                                    "/scss/**",       // CSS 파일
-                                    "/favicon.ico"   // 파비콘
-                            ).permitAll();
-
-
-                    request.requestMatchers("/auth/**").permitAll()
-                            .anyRequest().authenticated();
-                })
-                .sessionManagement(sessionManagement -> {
-                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                    // 하나씩 명시 후 마지막에 처리
+                    request.requestMatchers(
+                            "/ws-stomp/**",
+                            "/css/**",
+                            "/font/**",
+                            "/icon/**",
+                            "/images/**",
+                            "/js/**",
+                            "/scss/**",
+                            "/favicon.ico"
+                    ).permitAll();
+                    request.requestMatchers("/auth/**").permitAll();
+                    request.anyRequest().authenticated(); // 마지막에 위치
                 })
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint());

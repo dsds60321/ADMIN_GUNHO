@@ -28,7 +28,7 @@ public class Auth extends BaseTimeEntity {
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_idx")
     private User user;
 
     public void updateAccessToken(String newAccessToken) {

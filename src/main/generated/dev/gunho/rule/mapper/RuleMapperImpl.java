@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-02-03T00:05:22+0900",
+    date = "2025-02-16T23:21:01+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 @Component
 public class RuleMapperImpl implements RuleMapper {
 
     @Override
-    public RulePayload toDTO(Rule arg0) {
-        if ( arg0 == null ) {
+    public RulePayload toDTO(Rule entity) {
+        if ( entity == null ) {
             return null;
         }
 
@@ -30,12 +30,12 @@ public class RuleMapperImpl implements RuleMapper {
         int sellPrice = 0;
         BigDecimal sellPercentage = null;
 
-        id = arg0.getId();
-        stock = arg0.getStock();
-        buyPrice = arg0.getBuyPrice();
-        buyPercentage = arg0.getBuyPercentage();
-        sellPrice = arg0.getSellPrice();
-        sellPercentage = arg0.getSellPercentage();
+        id = entity.getId();
+        stock = entity.getStock();
+        buyPrice = entity.getBuyPrice();
+        buyPercentage = entity.getBuyPercentage();
+        sellPrice = entity.getSellPrice();
+        sellPercentage = entity.getSellPercentage();
 
         RulePayload rulePayload = new RulePayload( id, stock, buyPrice, buyPercentage, sellPrice, sellPercentage );
 

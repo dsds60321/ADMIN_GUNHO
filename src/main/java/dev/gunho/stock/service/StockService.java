@@ -24,13 +24,10 @@ import dev.gunho.user.dto.EmailPayload;
 import dev.gunho.user.entity.QInvite;
 import dev.gunho.user.entity.QUser;
 import dev.gunho.user.entity.User;
-import dev.gunho.user.mapper.UserMapper;
-import dev.gunho.user.repository.InviteRepository;
 import dev.gunho.user.repository.TemplateRepository;
 import dev.gunho.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -47,19 +44,13 @@ import java.util.Map;
 public class StockService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final TemplateRepository templateRepository;
-    @Value("${api.alpha-vantage.host}")
-    private String alphaVantageApi;
 
-    @Value("${api.alpha-vantage.key}")
-    private String alphaVantageApiKey;
 
     private final StockSymbolRepository stockSymbolRepository;
     private final StockMapper stockMapper = StockMapper.INSTANCE;
     private final StockRepository stockRepository;
     private final RuleRepository ruleRepository;
-    private final InviteRepository inviteRepository;
 
     private final JPAQueryFactory queryFactory;
     private final KafkaProducerService kafkaProducerService;

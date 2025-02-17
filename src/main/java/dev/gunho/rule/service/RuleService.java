@@ -33,10 +33,10 @@ public class RuleService {
 
     private final RuleRepository ruleRepository;
     private final StockRepository stockRepository;
+    private final UserRepository userRepository;
 
     private final RuleMapper ruleMapper;
     private final StockMapper stockMapper;
-    private final UserRepository userRepository;
 
     public ModelAndView getPagingByCondition(ModelAndView mv, PageRequest pageRequest, String condition) {
         Page<Rule> rulePage = ruleRepository.findByOrderByRegDate(pageRequest);

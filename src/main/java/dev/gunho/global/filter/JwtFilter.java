@@ -29,13 +29,25 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = getTokenFromCookie(request, "accessToken");
-        if (accessToken != null && jwtProvider.validateToken(accessToken)) {
-            UsernamePasswordAuthenticationToken authentication = getAuthenticationFromToken(accessToken);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            String accessToken = getTokenFromCookie(request, "accessToken");
+            if (accessToken != null && jwtProvider.validateToken(accessToken)) {
+                UsernamePasswordAuthenticationToken authentication = getAuthenticationFromToken(accessToken);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            log.error("Error occurred during JWT authentication: {}", e.getMessage(), e);
+            // 응답이 커밋되기 전에 처리
+            if (!response.isCommitted()) {
+                response.resetBuffer(); // 기존 응답물을 초기화
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                response.flushBuffer();
+            }
         }
-        filterChain.doFilter(request, response);
     }
 
     private String getTokenFromCookie(HttpServletRequest request, String tokenName) {
@@ -49,7 +61,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
 
     private UsernamePasswordAuthenticationToken getAuthenticationFromToken(String token) {
         Long idx = jwtProvider.getIdxFromToken(token);

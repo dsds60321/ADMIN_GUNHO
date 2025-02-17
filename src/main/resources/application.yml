@@ -6,6 +6,10 @@ logging:
     org:
       hibernate: INFO
       apache.kafka: OFF
+      springframework:
+        web:
+          socket:
+            sockjs: DEBUG
 
 
 spring:

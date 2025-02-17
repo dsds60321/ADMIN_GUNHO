@@ -24,6 +24,12 @@ public class UserController {
         return userService.getUser(userDetail.getId());
     }
 
+    @GetMapping("/friends")
+    @ResponseBody
+    public ResponseEntity<?> getFriends(@AuthenticationPrincipal UserDetail userDetail) {
+        return userService.getFriends(userDetail);
+    }
+
     @GetMapping("/friends/form")
     public String form() {
         return "/pages/user/friends/form";
@@ -49,10 +55,5 @@ public class UserController {
     @PostMapping("/friends/invite")
     public @ResponseBody ResponseEntity<?> inviteFriend(@AuthenticationPrincipal UserDetail userDetail, @RequestBody final InviteDto inviteDto) {
         return userService.invite(userDetail, inviteDto);
-    }
-
-    @GetMapping("/chat/form")
-    public String chatForm() {
-        return "/pages/user/chat/form";
     }
 }

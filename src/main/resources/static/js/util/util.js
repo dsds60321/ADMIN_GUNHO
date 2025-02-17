@@ -11,9 +11,21 @@ const util = {
 
                 switch (id) {
                     case `${selectPrefix}symbol`:
-                        const { data } = await Get('/stock/symbols');
-                        util.select2Util.init(`#${selectPrefix}symbol`, data.res);
+                        const { data : symbols } = await Get('/stock/symbols');
+                        util.select2Util.init(`#${selectPrefix}symbol`, symbols.res);
+                        break;
 
+                    case `${selectPrefix}frineds`:
+                        const { data : friends } = await Get('/user/friends');
+                        const friendsDto = friends.res.map(friend => {
+                            return  {
+                                id : friend.inviteeIdx,
+                                text : friend.inviteeId
+                            }
+                        });
+
+
+                        util.select2Util.init(`#${selectPrefix}frineds`, friendsDto);
                         break;
                 }
 
@@ -64,14 +76,22 @@ const util = {
             // 데이터를 Select2 형식으로 변환
             const transformedData = [
                 { text: '', id: '' }, // 기본 비어있는 값을 추가
-                ...Object.entries(data).map(([key, value]) => {
-                    return {
-                        text: value,
-                        id : key,
-                        original : {key, value}
-                    };
-                })
+                ...(Array.isArray(data) ?
+                        // data가 배열인 경우
+                        data.map(item => ({
+                            text: item.text || item.id || "",
+                            id: item.id || "",
+                            original: item
+                        })) :
+                        // data 객체인 경우
+                        Object.entries(data).map(([key, value]) => ({
+                            text: value,
+                            id: key,
+                            original: { key, value }
+                        }))
+                )
             ];
+
 
             // 기본 옵션
             const defaultOptions = {
@@ -187,7 +207,10 @@ const util = {
 
 
     modal : {
-        open : async function (url, size = 'medium') {
+        open : async function (evt, url, size = 'medium') {
+            const fn = evt.dataset.fn;
+            const fnArgs = evt.dataset.args ? evt.dataset.args.split(',') : []; // 인수
+
             const modalContainer = document.getElementById('modal-container');
             const modalBody = document.getElementById('modal-body');
 
@@ -199,6 +222,25 @@ const util = {
                 modalBody.innerHTML = data;
                 modalContainer.classList.remove('hidden');
                 modalContainer.classList.add('visible');
+                util.init();
+
+                if (fn) {
+                    console.log(fnArgs)
+                    try {
+                        const func = eval(fn); // 해당 이름의 함수를 찾는다.
+                        if (typeof func === 'function') {
+                            func(...fnArgs.map(arg => arg.trim())); // 함수에 인수 전달 후 실행
+                        } else {
+                            console.error(`data-fn(${fn})은 함수가 아닙니다.`);
+                        }
+                    } catch (error) {
+                        console.error(`data-fn(${fn}) 실행 중 오류 발생:`, error);
+                    }
+                }
+
+
+
+
 
                 modalContainer.addEventListener('click', (e) => {
                     if (e.target === modalContainer) {

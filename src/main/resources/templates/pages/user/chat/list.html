@@ -3,35 +3,31 @@
     <div class="table-responsive">
         <table class="data-table">
             <thead>
-                <tr>
-                    <th>Symbol</th>
-                    <th>Currency</th>
-                    <th>Quantity</th>
-                    <th>시장가</th>
-                    <th>평단가</th>
-                    <th>희망 매도가</th>
-                    <th>희망 매수가</th>
-                </tr>
+            <tr>
+                <th>제목</th>
+            </tr>
             </thead>
             <tbody>
-                <th:block th:if="${#lists.size(PAGE.content) eq 0}">
-                    <tr>
-                        <td colspan="7">
-                            조회된 데이터가 없습니다.
-                        </td>
-                    </tr>
-                </th:block>
-                <th:block th:unless="${#lists.size(PAGE.content) eq 0}">
-                    <tr th:each="entry : ${PAGE.content}">
-                        <td th:text="${entry.symbol}"></td>
-                        <td th:text="${entry.currency}"></td>
-                        <td th:text="${entry.quantity}"></td>
-                        <td th:text="${entry.marketPrice}"></td>
-                        <td th:text="${entry.averagePrice}"></td>
-                        <td th:text="${entry.sellPrice}"></td>
-                        <td th:text="${entry.buyPrice}"></td>
-                    </tr>
-                </th:block>
+            <th:block th:if="${#lists.size(PAGE.content) eq 0}">
+                <tr>
+                    <td colspan="8">
+                        조회된 데이터가 없습니다.
+                    </td>
+                </tr>
+            </th:block>
+            <th:block th:unless="${#lists.size(PAGE.content) eq 0}">
+                <tr th:each="entry : ${PAGE.content}">
+                    <td>
+                        <a class="cursor-pointer"
+                           th:text="${entry.title}"
+                           onclick="util.modal.open(this, '/user/chat/1', 'large')"
+                           data-fn="user.chat.init"
+                           th:data-args="${userId}"
+                        >
+                        </a>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>

@@ -37,6 +37,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.function.Function;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -116,9 +117,9 @@ public class AuthService {
         User user = userRepository.findByUserId(userDto.userId())
                 .orElseThrow(() -> new GlobalException(ApiResponseCode.NOT_FOUND));
 
-        if (user.getRole().equals(UserRole.GUEST)) {
-            return ApiResponse.BAD_REQUEST("접근 권한이 없습니다.");
-        }
+//        if (user.getRole().equals(UserRole.GUEST)) {
+//            return ApiResponse.BAD_REQUEST("접근 권한이 없습니다.");
+//        }
 
         if (!passwordEncoder.matches(userDto.password(), user.getPassword())) {
             return ApiResponse.BAD_REQUEST("패스워드가 일치하지 않습니다.");
@@ -187,5 +188,9 @@ public class AuthService {
 
         kafkaProducerService.sendMessage("email-topic", payload);
         return ApiResponse.SUCCESS();
+    }
+
+    public static void main(String[] args) {
+
     }
 }

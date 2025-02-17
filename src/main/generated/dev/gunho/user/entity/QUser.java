@@ -26,6 +26,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final QAuth auth;
 
+    public final ListPath<dev.gunho.chat.entity.ChatRoom, dev.gunho.chat.entity.QChatRoom> chatRooms = this.<dev.gunho.chat.entity.ChatRoom, dev.gunho.chat.entity.QChatRoom>createList("chatRooms", dev.gunho.chat.entity.ChatRoom.class, dev.gunho.chat.entity.QChatRoom.class, PathInits.DIRECT2);
+
     public final StringPath email = createString("email");
 
     public final NumberPath<Long> idx = createNumber("idx", Long.class);

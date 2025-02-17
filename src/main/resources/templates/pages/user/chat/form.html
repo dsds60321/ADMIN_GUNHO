@@ -7,43 +7,41 @@
     <div class="main-content-wrap">
         <div th:replace="~{/pages/fragments/header :: breadcrumbs('채팅 관리')}"></div>
 
-    <!-- product-list -->
         <div class="wg-box">
-        <div class="flex items-center justify-between gap10 flex-wrap">
-            <div class="wg-filter flex-grow">
-                <div class="show">
-                    <div class="text-tiny">Showing</div>
-                    <div class="select">
-                        <select name="size" id="page-size">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </select>
+            <div class="flex items-center justify-between gap10 flex-wrap">
+                <div class="wg-filter flex-grow">
+                    <div class="show">
+                        <div class="text-tiny">Showing</div>
+                        <div class="select">
+                            <select name="size" id="page-size">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                        </div>
+                        <div class="text-tiny">entries</div>
                     </div>
-                    <div class="text-tiny">entries</div>
+
+                    <form name="search-form" id="search-form" action="/user/chat/paging" method="get" onsubmit="return false" class="form-search">
+                        <fieldset class="name">
+                            <input type="text" placeholder="Search here..." class="" name="name" tabindex="2" value="">
+                        </fieldset>
+                        <div class="button-submit">
+                            <button class="" id="search-btn" type="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
                 </div>
-
-                <form name="search-form" id="search-form" action="/user/friends/paging" method="get" onsubmit="return false" class="form-search">
-                    <fieldset class="name">
-                        <input type="text" placeholder="Search here..." class="" name="name" tabindex="2" value="">
-                    </fieldset>
-                    <div class="button-submit">
-                        <button class="" id="search-btn" type="submit"><i class="icon-search"></i></button>
-                    </div>
-                </form>
+                <a class="tf-button style-1 w208" onclick="util.modal.open(this, '/user/chat')" data-fn="user.chat.init"><i class="icon-plus"></i>채팅방 만들기</a>
             </div>
-            <a class="tf-button style-1 w208" href="/user/friends/invite"><i class="icon-plus"></i>친구 초대</a>
+            <!-- 폼 -->
+            <div th:replace="~{/pages/fragments/paging :: paging('paging')}"></div>
+            <div th:replace="~{/pages/fragments/modal :: modal}"></div>
         </div>
-
-        <!-- 폼 -->
-        <div th:replace="~{/pages/fragments/paging :: paging('paging')}"></div>
-
-
     </div>
-    <!-- /product-list -->
-    </div>
-<script>
+<script src="/js/pages/user.js"></script>
+<script th:inline="javascript">
     util.display.selectedSidebar('user-menu', 2)
+    // user.chat.init([[${userId}]]);
 </script>
 </div>
 </body>

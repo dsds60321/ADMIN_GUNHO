@@ -250,6 +250,23 @@ const jqueryValidOptions = {
                 },
                 submitHandler: submitHandler // 외부에서 주입받은 함수 사용
             };
+        },
+
+        chat : {
+            invite : function(submitHandler) {
+                return {
+                    ...jqueryValidOptions.commonOption,
+                    rules: {
+                        friend: {
+                            required: true
+                        },
+                        title : {
+                            required: true
+                        }
+                    },
+                    submitHandler: submitHandler
+                }
+            }
         }
     }
 }

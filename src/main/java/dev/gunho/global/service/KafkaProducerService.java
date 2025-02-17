@@ -59,8 +59,6 @@ public class KafkaProducerService {
 
             // Kafka 요청 토픽으로 메시지 전송
             kafkaTemplate.send(topic, requestId, messageJson);
-            System.out.println("Sent message to Kafka topic: " + topic + ", Request ID: " + requestId);
-
             // 응답 Future 생성
             return kafkaResponseService.createFutureForRequest(requestId);
         } catch (JsonProcessingException e) {
