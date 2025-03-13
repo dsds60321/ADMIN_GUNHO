@@ -26,8 +26,6 @@ public class QStock extends EntityPathBase<Stock> {
 
     public final NumberPath<Double> averagePrice = createNumber("averagePrice", Double.class);
 
-    public final NumberPath<Double> buyPrice = createNumber("buyPrice", Double.class);
-
     public final StringPath currency = createString("currency");
 
     public final NumberPath<Long> idx = createNumber("idx", Long.class);
@@ -38,8 +36,6 @@ public class QStock extends EntityPathBase<Stock> {
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
     public final dev.gunho.rule.entity.QRule rule;
-
-    public final NumberPath<Double> sellPrice = createNumber("sellPrice", Double.class);
 
     public final StringPath symbol = createString("symbol");
 

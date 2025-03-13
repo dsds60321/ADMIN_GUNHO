@@ -4,6 +4,7 @@
         <table class="data-table">
             <thead>
                 <tr>
+                    <th>RULE</th>
                     <th>Symbol</th>
                     <th>Currency</th>
                     <th>Quantity</th>
@@ -23,14 +24,15 @@
                     </tr>
                 </th:block>
                 <th:block th:unless="${#lists.size(PAGE.content) eq 0}">
-                    <tr th:each="entry : ${PAGE.content}">
+                    <tr th:data-symbol="${entry.symbol}" th:each="entry : ${PAGE.content}">
+                        <td th:text="${entry.rule.id}"></td>
                         <td th:text="${entry.symbol}"></td>
                         <td th:text="${entry.currency}"></td>
                         <td th:text="${entry.quantity}"></td>
-                        <td th:text="${entry.marketPrice}"></td>
+                        <td id="market-price" th:text="${entry.marketPrice}"></td>
                         <td th:text="${entry.averagePrice}"></td>
-                        <td th:text="${entry.sellPrice}"></td>
-                        <td th:text="${entry.buyPrice}"></td>
+                        <td id="sell-price" th:text="${entry.sellPrice}"></td>
+                        <td id="buy-price" th:text="${entry.buyPrice}"></td>
                         <td>
                             <div class="dropdown-container">
                                 <span class="badge bg-danger dropdown-toggle" onclick="util.display.dropdown.toggleDropdown(this)">알림</span>

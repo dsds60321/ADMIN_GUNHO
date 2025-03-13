@@ -1,6 +1,6 @@
 package dev.gunho.stock.dto;
 
-import dev.gunho.rule.entity.Rule;
+import dev.gunho.rule.dto.RuleDto;
 
 public record StockPagePayload(
         String symbol,
@@ -10,16 +10,16 @@ public record StockPagePayload(
         Double sellPrice,
         Double marketPrice,
         int quantity,
-        Rule rule
+        RuleDto rule
 ) {
 
-    public StockPagePayload withMarketPrice(Double newMarketPrice) {
+    public StockPagePayload withMarketPrice(Double buyPrice, Double sellPrice, Double newMarketPrice) {
         return new StockPagePayload(
                 this.symbol,
                 this.currency,
                 this.averagePrice,
-                this.buyPrice,
-                this.sellPrice,
+                buyPrice,
+                sellPrice,
                 newMarketPrice,
                 this.quantity,
                 this.rule

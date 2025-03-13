@@ -9,6 +9,7 @@ import dev.gunho.global.entity.Template;
 import dev.gunho.global.exception.GlobalException;
 import dev.gunho.global.service.KafkaProducerService;
 import dev.gunho.global.service.RedisService;
+import dev.gunho.rule.dto.RuleDto;
 import dev.gunho.rule.entity.Rule;
 import dev.gunho.rule.repository.RuleRepository;
 import dev.gunho.stock.constant.StockConstants;
@@ -18,6 +19,7 @@ import dev.gunho.stock.dto.StockPagePayload;
 import dev.gunho.stock.entity.Stock;
 import dev.gunho.stock.entity.StockSymbol;
 import dev.gunho.stock.mapper.StockMapper;
+import dev.gunho.stock.mapper.StockMapperImpl;
 import dev.gunho.stock.repository.StockRepository;
 import dev.gunho.stock.repository.StockSymbolRepository;
 import dev.gunho.user.dto.EmailPayload;
@@ -35,8 +37,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -56,6 +61,40 @@ public class StockService {
     private final KafkaProducerService kafkaProducerService;
     private final RedisService redisService;
 
+    private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 날짜 형식 정의
+    private static final int DASHBOARD_TOTAL_SIZE = 30;
+
+    public ResponseEntity<?> getMyStocks(Long idx) {
+        HashMap<String, Object> resMap = new HashMap<>();
+
+        List<Stock> stocks = stockRepository.findAllByUserIdx(idx);
+
+        stocks.forEach((stock) -> {
+            // Redis에서 해시 데이터 가져오기
+            Map<Object, Object> redisStock = redisService.getHashEntries(
+                    String.format(StockConstants.STOCK_DAILY_JSON_SYMBOL, stock.getSymbol())
+            );
+
+            // Redis에서 가져온 데이터를 LocalDate 기준으로 정렬 후 10개 선택
+            List<Map<Object, Object>> top10Entries = redisStock.entrySet().stream()
+                    .sorted((entry1, entry2) -> {
+                        // 문자열 키를 LocalDate로 변환
+                        LocalDate date1 = LocalDate.parse(entry1.getKey().toString(), DEFAULT_DATE_FORMAT);
+                        LocalDate date2 = LocalDate.parse(entry2.getKey().toString(), DEFAULT_DATE_FORMAT);
+
+                        return date2.compareTo(date1); // 최신 날짜 순서로 정렬 (내림차순)
+                    })
+                    .limit(DASHBOARD_TOTAL_SIZE)
+                    .map(entry -> Map.of(entry.getKey(), entry.getValue())) // Map으로 변환
+                    .toList(); // Stream 결과를 리스트로 변환
+
+            // 결과를 저장
+            resMap.put(stock.getSymbol(), top10Entries);
+        });
+
+
+        return ApiResponse.SUCCESS("", resMap);
+    }
 
     public ResponseEntity<?> getSymbols() {
         Map<Object, Object> symbols = redisService.getHashEntries(StockConstants.STOCK_SYMBOL_HASH);
@@ -98,7 +137,22 @@ public class StockService {
 
         List<StockPagePayload> updatedContent = pagingDTO.getContent().stream().map(stock -> {
             String price = redisService.get(String.format(StockConstants.STOCK_DAILY_PRICE_SYMBOL, stock.symbol()));
-            return stock.withMarketPrice(Double.parseDouble(price));
+            RuleDto ruleDto = stock.rule();
+            // 평균 가격 가져오기
+            Double averagePrice = stock.averagePrice();
+
+            // 매수/매도 비율 가져오기
+            BigDecimal sellPercentage = ruleDto.sellPercentage();
+            BigDecimal buyPercentage = ruleDto.buyPercentage();
+
+            // 계산
+            // 매도가
+            Double sellCalculation = averagePrice + (averagePrice * sellPercentage.doubleValue());
+            // 매수가
+            Double buyCalculation = averagePrice - (averagePrice * buyPercentage.doubleValue());
+
+
+            return stock.withMarketPrice(buyCalculation, sellCalculation, Double.parseDouble(price));
         }).toList(); // 변경된 데이터를 리스트로 수집
 
         // 변환한 데이터를 PagingDTO에 반영
@@ -126,7 +180,6 @@ public class StockService {
             return ApiResponse.BAD_REQUEST("초대한 친구가 없습니다.");
         }
 
-
         List<String> toUsers = receivedInvites.stream().map(User::getEmail).toList();
 
         Template template = templateRepository.getById("STOCK_NOTI");
@@ -143,5 +196,14 @@ public class StockService {
 
         kafkaProducerService.sendMessage("email-topic", payload);
         return ApiResponse.SUCCESS();
+    }
+
+    public ResponseEntity<?> getDailySymbol(String symbol) {
+        String price = redisService.get(String.format(StockConstants.STOCK_DAILY_PRICE_HASH_SYMBOL, symbol));
+        if (price != null) {
+            return ApiResponse.SUCCESS(symbol, price);
+        }
+
+        return ApiResponse.BAD_REQUEST();
     }
 }

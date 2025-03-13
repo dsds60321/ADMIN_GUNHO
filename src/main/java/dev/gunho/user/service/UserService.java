@@ -1,7 +1,9 @@
 package dev.gunho.user.service;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.gunho.global.dto.ApiResponse;
 import dev.gunho.global.dto.ApiResponseCode;
+import dev.gunho.global.dto.PagingDTO;
 import dev.gunho.global.dto.UserDetail;
 import dev.gunho.global.entity.Template;
 import dev.gunho.global.exception.GlobalException;
@@ -11,6 +13,8 @@ import dev.gunho.user.dto.EmailPayload;
 import dev.gunho.user.dto.InviteDto;
 import dev.gunho.user.dto.UserPayload;
 import dev.gunho.user.entity.Invite;
+import dev.gunho.user.entity.QInvite;
+import dev.gunho.user.entity.QUser;
 import dev.gunho.user.entity.User;
 import dev.gunho.user.mapper.InviteMapper;
 import dev.gunho.user.mapper.UserMapper;
@@ -18,9 +22,11 @@ import dev.gunho.user.repository.InviteRepository;
 import dev.gunho.user.repository.TemplateRepository;
 import dev.gunho.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,6 +41,7 @@ public class UserService {
     private final InviteRepository inviteRepository;
     private final UserMapper userMapper;
 
+    private final JPAQueryFactory queryFactory;
     private final KafkaProducerService kafkaProducerService;
 
     // 유저 정보
@@ -46,9 +53,42 @@ public class UserService {
         return ApiResponse.SUCCESS(payload);
     }
 
-    public ModelAndView getPagingByCondition(ModelAndView mv, PageRequest pageRequest, Long id, String condition) {
-        return null;
+    @Transactional
+    public ModelAndView getPagingByCondition(ModelAndView mv, PageRequest pageRequest, Long userIdx, String condition) {
+        QInvite qInvite = QInvite.invite;
+        QUser qUserInviter = QUser.user;
+        QUser qUserInvitee = new QUser("invitee");
+
+
+        // 조건 처리
+
+        List<Invite> invites = queryFactory.selectFrom(qInvite)
+                .join(qInvite.inviter, qUserInviter).fetchJoin()  // inviter 즉시 로딩
+                .leftJoin(qInvite.invitee, qUserInvitee).fetchJoin()  // invitee 즉시 로딩 (nullable)
+                .where(qInvite.inviter.idx.eq(userIdx))  // 동적 조건
+                .orderBy(qInvite.invitationTime.desc())  // 최신 초대 정렬
+                .offset(pageRequest.getOffset())  // 현재 페이지의 시작 인덱스
+                .limit(pageRequest.getPageSize()) // 페이지 크기
+                .fetch();  // 결과 가져오기
+
+        // 총 데이터 개수 계산
+        long totalElements = queryFactory.select(qInvite.count())
+                .from(qInvite)
+                .where(qInvite.inviter.idx.eq(userIdx))
+                .fetchOne();
+
+        // 전체 페이지 수 계산
+        int totalPages = (int) Math.ceil((double) totalElements / pageRequest.getPageSize());
+
+        // PagingDTO 생성
+        PagingDTO<Invite> pagingDTO = new PagingDTO<>(invites, pageRequest.getPageSize(), totalElements, pageRequest.getPageNumber(), totalPages);
+
+
+        // ModelAndView에 데이터 추가
+        mv.addObject("PAGE", pagingDTO);
+        return mv;
     }
+
 
     public ResponseEntity<?> invite(UserDetail userDetail, InviteDto inviteDto) {
         User user = userRepository.findById(userDetail.getId())

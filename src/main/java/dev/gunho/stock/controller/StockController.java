@@ -1,7 +1,6 @@
 package dev.gunho.stock.controller;
 
 import dev.gunho.global.dto.UserDetail;
-import dev.gunho.rule.service.RuleService;
 import dev.gunho.stock.dto.NotiDTO;
 import dev.gunho.stock.dto.StockDTO;
 import dev.gunho.stock.service.StockService;
@@ -21,7 +20,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class StockController {
 
     private final StockService stockService;
-    private final RuleService ruleService;
+
+    @GetMapping
+    public @ResponseBody ResponseEntity<?> stocks(@AuthenticationPrincipal UserDetail userDetail) {
+        return stockService.getMyStocks(userDetail.getId());
+    }
+
+    @GetMapping("/daily/{symbol}")
+    public @ResponseBody ResponseEntity<?> getDailyPrice(@PathVariable("symbol") String symbol) {
+        return stockService.getDailySymbol(symbol);
+    }
 
     @GetMapping("/symbols")
     public @ResponseBody ResponseEntity<?> getSymbols() {

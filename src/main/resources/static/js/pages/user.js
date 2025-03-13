@@ -36,7 +36,6 @@ const user = {
             const { data } = await Post('/user/chat/recv', frm);
             if (data.result) {
                 data.res.forEach(message => {
-                    console.log(message)
                     user.chat.createChat(message, userId);
                 });
             }
@@ -59,8 +58,10 @@ const user = {
                     document.querySelector('#chatMessages').innerHTML = ''
                     const receivedMessages = JSON.parse(message.body);
 
-                    receivedMessages.body.res.forEach(message => {
-                        user.chat.createChat(message, userId);
+                    receivedMessages.body.res.forEach(data => {
+                        if (data.message && data.message.trim() !== '') {
+                            user.chat.createChat(data, userId);
+                        }
                     });
                 });
             });
@@ -72,7 +73,7 @@ const user = {
             // 서버로 메시지 전송
             const frm = document.frm;
 
-            if (frm.message.value) {
+            if (frm.message.value && frm.message.value.trim() !== '') {
                 if (user.chat.stompClient && user.chat.stompClient.connected) {
                     const reqObj = util.form.toJson(frm);
                     user.chat.stompClient.send('/app/send', {}, reqObj);

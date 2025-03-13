@@ -30,11 +30,6 @@ public class Stock extends BaseTimeEntity {
 
     private Double averagePrice; // 평단가
 
-    private Double buyPrice; // 매수 목표가
-
-    private Double sellPrice; // 매도 목표가
-
-
     // User와의 N:1 관계 추가
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_idx") // 외래 키

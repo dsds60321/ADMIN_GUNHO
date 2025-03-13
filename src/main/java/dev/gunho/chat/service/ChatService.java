@@ -32,6 +32,7 @@ import org.springframework.data.redis.connection.stream.MapRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -157,7 +158,10 @@ public class ChatService {
         String chatRedisKey = String.format(CHAT_KEY, chatRoom.getIdx());
 
         List<ChatPayload> chayPayloads = toChayPayloads(chatRedisKey);
-        chayPayloads.add(new ChatPayload(chatReqDto.message(), UTIL.getCurrentDate(), chatReqDto.userId()));
+        if (StringUtils.hasText(chatReqDto.message())) {
+            chayPayloads.add(new ChatPayload(chatReqDto.message(), UTIL.getCurrentDate(), chatReqDto.userId()));
+        }
+
         return ApiResponse.SUCCESS(chayPayloads);
     }
 

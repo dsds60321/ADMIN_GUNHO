@@ -668,3 +668,31 @@ h1 {
         margin: 10px;
     }
 }
+
+
+/* 매수 알림 효과 (녹색으로 반짝임) */
+@keyframes buy-highlight {
+    0% { background-color: #cce5ff; } /* 연한 파란색 */
+    50% { background-color: #99ccff; } /* 조금 더 진한 파란색 */
+    100% { background-color: #cce5ff; } /* 원래 파란색 */
+}
+
+.buy-highlight {
+    animation: buy-highlight 1.5s ease-in-out 5; /* 1.5초에 한 번, 총 5회 반복 */
+}
+
+/* 매도 알림 효과 (빨간색으로 여러 번 반짝임) */
+@keyframes sell-highlight {
+    0% { background-color: #f8d7da; } /* 연한 빨간색 */
+    50% { background-color: #f5a6ab; } /* 조금 더 진한 빨간색 */
+    100% { background-color: #f8d7da; } /* 원래 빨간색 */
+}
+
+.sell-highlight {
+    animation: sell-highlight 1.5s ease-in-out 5; /* 1.5초에 한 번, 총 5회 반복 */
+}
+
+/* 애니메이션 종료 후 원래 상태 복구 */
+.reset-highlight {
+    animation: none !important;
+}

@@ -4,13 +4,9 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Symbol</th>
-                    <th>Currency</th>
-                    <th>Quantity</th>
-                    <th>시장가</th>
-                    <th>평단가</th>
-                    <th>희망 매도가</th>
-                    <th>희망 매수가</th>
+                    <th>초대한 유저</th>
+                    <th>메일 주소</th>
+                    <th>상태</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,13 +19,16 @@
                 </th:block>
                 <th:block th:unless="${#lists.size(PAGE.content) eq 0}">
                     <tr th:each="entry : ${PAGE.content}">
-                        <td th:text="${entry.symbol}"></td>
-                        <td th:text="${entry.currency}"></td>
-                        <td th:text="${entry.quantity}"></td>
-                        <td th:text="${entry.marketPrice}"></td>
-                        <td th:text="${entry.averagePrice}"></td>
-                        <td th:text="${entry.sellPrice}"></td>
-                        <td th:text="${entry.buyPrice}"></td>
+                        <td th:text="${entry.invitee.userId}"></td>
+                        <td th:text="${entry.email}"></td>
+                        <td th:switch="${entry.status.toString()}">
+                            <span th:case="'PENDING'" th:text="'대기 중'"></span>
+                            <span th:case="'ACCEPTED'" th:text="'가입완료'"></span>
+                            <span th:case="'REJECTED'" th:text="'거절됨'"></span>
+                            <span th:case="'EXPIRED'" th:text="'만료'"></span>
+                            <span th:case="*" th:text="'알 수 없음'"></span>
+                        </td>
+
                     </tr>
                 </th:block>
             </tbody>

@@ -19,7 +19,7 @@ public interface StockMapper extends BaseMapper<Stock, StockPagePayload>
     StockMapper INSTANCE = Mappers.getMapper(StockMapper.class);
 
     @Override
-    @Mappings({@Mapping(target = "rule", ignore = true)})
+//    @Mappings({@Mapping(target = "rule", ignore = true)})
     StockPagePayload toDTO(Stock stock);
 
     @Mappings({@Mapping(target = "rule", ignore = true)})
@@ -41,8 +41,6 @@ public interface StockMapper extends BaseMapper<Stock, StockPagePayload>
             @Mapping(target = "idx", ignore = true),
             @Mapping(target = "rule", source = "rule"),
             @Mapping(target = "user", source = "user"),
-            @Mapping(target = "buyPrice", source = "stockDTO.buyPrice"),
-            @Mapping(target = "sellPrice", source = "stockDTO.sellPrice")
     })
     Stock toEntityWithRule(StockDTO stockDTO, User user, Rule rule);
 
