@@ -150,9 +150,11 @@ public class StockService {
             Double sellCalculation = averagePrice + (averagePrice * sellPercentage.doubleValue());
             // 매수가
             Double buyCalculation = averagePrice - (averagePrice * buyPercentage.doubleValue());
+            BigDecimal sellRounded = new BigDecimal(sellCalculation).setScale(2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal buyRounded = new BigDecimal(buyCalculation).setScale(2, BigDecimal.ROUND_HALF_UP);
 
 
-            return stock.withMarketPrice(buyCalculation, sellCalculation, Double.parseDouble(price));
+            return stock.withMarketPrice(buyRounded.doubleValue(), sellRounded.doubleValue(), Double.parseDouble(price));
         }).toList(); // 변경된 데이터를 리스트로 수집
 
         // 변환한 데이터를 PagingDTO에 반영
@@ -199,7 +201,7 @@ public class StockService {
     }
 
     public ResponseEntity<?> getDailySymbol(String symbol) {
-        String price = redisService.get(String.format(StockConstants.STOCK_DAILY_PRICE_HASH_SYMBOL, symbol));
+        String price = redisService.get(String.format(StockConstants.STOCK_DAILY_PRICE_SYMBOL, symbol));
         if (price != null) {
             return ApiResponse.SUCCESS(symbol, price);
         }
